@@ -20,5 +20,6 @@ model Customer {
   city    String @db.VarChar(25)
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
+  commission Float @db.Float
 }
 
