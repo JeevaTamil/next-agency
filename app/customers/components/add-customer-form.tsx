@@ -34,16 +34,13 @@ const AddCustomerForm = () => {
     await axios.post("/api/customers", data).then((res) => {
       console.log(res);
     });
+    router.push("/customers");
     router.refresh();
-    
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit}>
-        <Box>
-          <Text size="6">Add Customer</Text>
-        </Box>
+      <form onSubmit={onSubmit} className="max-w-md">
         <Box className="space-y-4">
           <FormField
             control={form.control}
@@ -116,7 +113,6 @@ const AddCustomerForm = () => {
             )}
           />
 
-          
           <Button variant="default" type="submit">
             Submit
           </Button>

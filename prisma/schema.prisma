@@ -10,10 +10,19 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL_MAC_PRO")
 }
 
 model Customer {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(50)
+  address String @db.Text
+  city    String @db.VarChar(25)
+  gst     String @db.VarChar(16)
+  phone   String @db.VarChar(20)
+}
+
+model Supplier {
   id      Int    @id @default(autoincrement())
   name    String @db.VarChar(50)
   address String @db.Text
