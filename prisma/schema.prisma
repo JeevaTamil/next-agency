@@ -32,3 +32,7 @@ model Supplier {
   commission String @db.VarChar(5)
 }
 
+model Transport {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(50)
+}
