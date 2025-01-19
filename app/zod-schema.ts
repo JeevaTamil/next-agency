@@ -21,3 +21,7 @@ export const supplierSchema = z.object({
     .min(0)
     .max(5),
 });
+
+export const transportSchema = z.object({
+  name: z.string().min(3).max(25),
+});

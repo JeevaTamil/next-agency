@@ -5,7 +5,7 @@ import {
   NavigationMenuLink,
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
-import { Home, Users, Users2 } from "lucide-react";
+import { Home, Truck, Users, Users2 } from "lucide-react";
 import { Box } from "@radix-ui/themes";
 import { Separator } from "./ui/separator";
 const NavBar = () => {
@@ -19,6 +19,11 @@ const NavBar = () => {
       label: "Suppliers",
       href: "/suppliers",
       icon: Users2,
+    },
+    {
+      label: "Transports",
+      href: "/transports",
+      icon: Truck,
     },
   ];
 
