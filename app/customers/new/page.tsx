@@ -6,9 +6,7 @@ const NewCustomerPage = () => {
   return (
     <Card className="max-w-md">
       <CardHeader>Add Customer</CardHeader>
-      <CardContent>
-        <AddCustomerForm />
-      </CardContent>
+      <CardContent><AddCustomerForm /></CardContent>
     </Card>
   );
 };

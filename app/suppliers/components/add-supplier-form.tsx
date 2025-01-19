@@ -1,6 +1,6 @@
 "use client";
 
-import { customerSchema } from "@/app/zod-schema";
+import { supplierSchema } from "@/app/zod-schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,39 +19,41 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-type customerFormData = z.infer<typeof customerSchema>;
+type supplierFormData = z.infer<typeof supplierSchema>;
 
-const AddCustomerForm = () => {
+const AddSupplierForm = () => {
   const router = useRouter();
   const { toast } = useToast();
 
-  const form = useForm<customerFormData>({
-    resolver: zodResolver(customerSchema),
+  const form = useForm<supplierFormData>({
+    resolver: zodResolver(supplierSchema),
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
+    console.log(data);
     try {
-      await axios.post("/api/customers", data).then((res) => {
+      await axios.post("/api/suppliers", { data }).then((res) => {
         toast({
-          title: "Customer Created",
-          description: `Customer ${data.name} has been added successfully`,
+          title: "Supplier Created",
+          description: `Supplier ${data.name} has been added successfully`,
         });
         console.log(res);
       });
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error occured",
         description: `${(error as any).message}`,
         variant: "destructive",
       });
     }
-    router.push("/customers");
+    router.push("/suppliers");
     router.refresh();
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="max-w-md">
+      <form onSubmit={onSubmit}>
         <Box className="space-y-4">
           <FormField
             control={form.control}
@@ -69,7 +71,6 @@ const AddCustomerForm = () => {
                     {...field}
                   />
                 </FormControl>
-                {/* <FormDescription>This is your public display name.</FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -152,6 +153,27 @@ const AddCustomerForm = () => {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="commission"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Commission</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="3.0"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button variant="default" type="submit">
             Submit
           </Button>
@@ -161,4 +183,4 @@ const AddCustomerForm = () => {
   );
 };
 
-export default AddCustomerForm;
+export default AddSupplierForm;

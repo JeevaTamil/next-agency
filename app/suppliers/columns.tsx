@@ -1,9 +1,9 @@
 "use client";
 
-import { Customer } from "@prisma/client";
+import { Supplier } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<Customer>[] = [
+export const columns: ColumnDef<Supplier>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -19,5 +19,9 @@ export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: "gst",
     header: "GST",
+  },
+  {
+    accessorKey: "commission",
+    header: "Commission %",
   },
 ];
