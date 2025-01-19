@@ -60,7 +60,14 @@ const AddCustomerForm = () => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="ABC Firm" {...field} />
+                  <Input
+                    placeholder="ABC Firm"
+                    onInput={(e) => {
+                      e.currentTarget.value =
+                        e.currentTarget.value.toUpperCase();
+                    }}
+                    {...field}
+                  />
                 </FormControl>
                 {/* <FormDescription>This is your public display name.</FormDescription> */}
                 <FormMessage />
@@ -75,7 +82,14 @@ const AddCustomerForm = () => {
               <FormItem>
                 <FormLabel>City</FormLabel>
                 <FormControl>
-                  <Input placeholder="Chennai" {...field} />
+                  <Input
+                    placeholder="Chennai"
+                    onInput={(e) => {
+                      e.currentTarget.value =
+                        e.currentTarget.value.toUpperCase();
+                    }}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -89,7 +103,14 @@ const AddCustomerForm = () => {
               <FormItem>
                 <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Input placeholder="123 st, xyz road" {...field} />
+                  <Input
+                    placeholder="123 st, xyz road"
+                    onInput={(e) => {
+                      e.currentTarget.value =
+                        e.currentTarget.value.toUpperCase();
+                    }}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,7 +138,14 @@ const AddCustomerForm = () => {
               <FormItem>
                 <FormLabel>GST</FormLabel>
                 <FormControl>
-                  <Input placeholder="BGFB34FR434" {...field} />
+                  <Input
+                    placeholder="BGFB34FR434"
+                    onInput={(e) => {
+                      e.currentTarget.value =
+                        e.currentTarget.value.toUpperCase();
+                    }}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
