@@ -5,7 +5,7 @@ import {
   NavigationMenuLink,
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
-import { Home, Truck, Users, Users2 } from "lucide-react";
+import { Home, ReceiptIndianRupee, Truck, Users, Users2 } from "lucide-react";
 import { Box } from "@radix-ui/themes";
 import { Separator } from "./ui/separator";
 const NavBar = () => {
@@ -25,6 +25,11 @@ const NavBar = () => {
       href: "/transports",
       icon: Truck,
     },
+    {
+      label: "Bill Entries",
+      href: "/bill-entries",
+      icon: ReceiptIndianRupee,
+    },
   ];
 
   return (
@@ -41,7 +46,7 @@ const NavBar = () => {
             href={item.href}
             className={navigationMenuTriggerStyle()}
           >
-            <item.icon width="12" height="12" />
+            {/* <item.icon width="12" height="12" /> */}
             <span className="px-3">{item.label}</span>
           </NavigationMenuLink>
         ))}

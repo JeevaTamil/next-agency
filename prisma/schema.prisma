@@ -20,19 +20,56 @@ model Customer {
   city    String @db.VarChar(25)
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
+
+  bills BillEntry[]
 }
 
 model Supplier {
-  id      Int    @id @default(autoincrement())
-  name    String @db.VarChar(50)
-  address String @db.Text
-  city    String @db.VarChar(25)
-  gst     String @db.VarChar(16)
-  phone   String @db.VarChar(20)
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(50)
+  address    String @db.Text
+  city       String @db.VarChar(25)
+  gst        String @db.VarChar(16)
+  phone      String @db.VarChar(20)
   commission String @db.VarChar(5)
+
+  bills BillEntry[]
 }
 
 model Transport {
-  id      Int    @id @default(autoincrement())
-  name    String @db.VarChar(50)
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  bills BillEntry[]
+}
+
+model BillEntry {
+  id         Int      @id @default(autoincrement())
+  billDate   DateTime
+  billNumber String   @db.VarChar(20)
+
+  customerId Int      @db.Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  supplierId Int      @db.Int
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  productQty Int
+  lrNumber   String   @db.VarChar(20)
+  lrDate     DateTime
+
+  transportId Int       @db.Int
+  transport   Transport @relation(fields: [transportId], references: [id])
+
+  freight   Float
+  netAmount Float
+
+  taxType     TaxType
+  grossAmount Float
+}
+
+enum TaxType {
+  CGST
+  SGST
+  IGST
 }

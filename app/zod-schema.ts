@@ -25,3 +25,21 @@ export const supplierSchema = z.object({
 export const transportSchema = z.object({
   name: z.string().min(3).max(25),
 });
+
+export const billEntrySchema = z.object({
+  billDate: z.date(),
+  billNumber: z.string().min(3).max(25),
+
+  customer: customerSchema,
+  supplier: supplierSchema,
+  transport: transportSchema,
+
+  productQty: z.number().min(1),
+  lrNumber: z.string().min(3).max(25),
+  lrDate: z.date(),
+
+  fright: z.number().min(1),
+  netAmount: z.number().min(1),
+  taxType: z.string().min(3).max(10),
+  grossAmount: z.number().min(1),
+});
