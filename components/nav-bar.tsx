@@ -8,6 +8,8 @@ import {
 import { Home, ReceiptIndianRupee, Truck, Users, Users2 } from "lucide-react";
 import { Box } from "@radix-ui/themes";
 import { Separator } from "./ui/separator";
+import { ModeToggle } from "@/components/mode-toggle";
+
 const NavBar = () => {
   const navItems = [
     {
@@ -50,6 +52,11 @@ const NavBar = () => {
             <span className="px-3">{item.label}</span>
           </NavigationMenuLink>
         ))}
+      </NavigationMenu>
+      <NavigationMenu className="flex-auto">
+        <Box className="p-5">
+          <ModeToggle />
+        </Box>
       </NavigationMenu>
     </Box>
   );

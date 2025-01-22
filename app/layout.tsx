@@ -26,14 +26,15 @@ export default function RootLayout({
         {/* <SidebarProvider>
           <AppSidebar />
           <SidebarTrigger /> */}
-        <NavBar />
-        <Separator />
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <NavBar />
+          <Separator />
           <main className="p-5">{children}</main>
         </ThemeProvider>
 

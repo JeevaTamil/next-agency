@@ -27,19 +27,30 @@ export const transportSchema = z.object({
 });
 
 export const billEntrySchema = z.object({
-  billDate: z.date(),
+  billDate: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
   billNumber: z.string().min(3).max(25),
 
   customer: customerSchema,
   supplier: supplierSchema,
   transport: transportSchema,
 
-  productQty: z.number().min(1),
+  productQty: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
   lrNumber: z.string().min(3).max(25),
   lrDate: z.date(),
 
-  fright: z.number().min(1),
-  netAmount: z.number().min(1),
+  fright: z.preprocess((arg) => parseFloat(arg as string), z.number().min(1)),
+  netAmount: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
   taxType: z.string().min(3).max(10),
-  grossAmount: z.number().min(1),
+  grossAmount: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
 });

@@ -69,7 +69,6 @@ model BillEntry {
 }
 
 enum TaxType {
-  CGST
+  C_IGST
   SGST
-  IGST
 }
