@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Controller,
   UseFormReturn,
@@ -26,26 +26,28 @@ import {
 } from "@/components/ui/command";
 import { ChevronsUpDown, Check } from "lucide-react";
 import { CommonEntity } from "@/types/common-types";
-import { BillEntryFormData } from "./add-bill-entry-form";
+import { billEntryFormData } from "./add-bill-entry-form";
 import { Box } from "@radix-ui/themes";
 
-type Props<T extends CommonEntity> = {
-  form: UseFormReturn<BillEntryFormData>;
+type Props = {
+  form: UseFormReturn<billEntryFormData>;
   name: string;
   label: string;
-  searchList: T[];
+  searchList: CommonEntity[];
 };
 
-const SearchableTextField = <T extends CommonEntity>({
+const SearchableTextField = ({
   form,
   name,
   label,
   searchList,
-}: Props<T>) => {
+}: Props) => {
+  const [selectedName, setSelectedName] = useState<string | null>(null);
+
   return (
     <Controller
       control={form.control}
-      name={name as keyof BillEntryFormData}
+      name={name as keyof billEntryFormData}
       render={({ field }) => (
         <FormItem>
           <Box className="grid space-y-4">
@@ -54,9 +56,7 @@ const SearchableTextField = <T extends CommonEntity>({
               <PopoverTrigger asChild className="justify-start min-w-52">
                 <FormControl>
                   <Button variant="outline" role="combobox">
-                    {field.value
-                      ? searchList.find((c) => c.name === field.value)?.name
-                      : `Select a ${label.toLowerCase()}`}
+                    {selectedName || `Select a ${label.toLowerCase()}`}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
                 </FormControl>
@@ -73,15 +73,13 @@ const SearchableTextField = <T extends CommonEntity>({
                         <CommandItem
                           key={item.id}
                           value={item.name}
-                          onSelect={() =>
-                            form.setValue(
-                              name as keyof BillEntryFormData,
-                              item.name
-                            )
-                          }
+                          onSelect={() => {
+                            field.onChange(item.id);
+                            setSelectedName(item.name);
+                          }}
                         >
                           <span>{item.name}</span>
-                          {item.name === field.value && (
+                          {item.id === field.value && (
                             <Check className="opacity-80" />
                           )}
                         </CommandItem>

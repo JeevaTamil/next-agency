@@ -1,6 +1,6 @@
 "use client";
 
-import { billEntrySchema } from "@/app/zod-schema";
+import { billEntrySchema, transportSchema } from "@/app/zod-schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -28,7 +28,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "./searchable-text-field";
 
-export type BillEntryFormData = z.infer<typeof billEntrySchema>;
+export type billEntryFormData = z.infer<typeof billEntrySchema>;
+type transportFormData = z.infer<typeof transportSchema>;
 
 interface AddBillEntryFormProps {
   customers: Customer[];
@@ -43,7 +44,7 @@ const AddBillEntryForm = ({
 }: AddBillEntryFormProps) => {
   const [customersOpen, setCustomersOpen] = useState(false);
 
-  const form = useForm<BillEntryFormData>({
+  const form = useForm<billEntryFormData>({
     resolver: zodResolver(billEntrySchema),
   });
 
@@ -58,11 +59,15 @@ const AddBillEntryForm = ({
     }
   }, [netAmount, form]);
 
-  const onSubmit = form.handleSubmit((data) => {
-    console.log("Form is being submitted");
-    console.log("Submitted data:", data);
-  });
-
+  const onSubmit = form.handleSubmit(
+    async (data) => {
+      console.log("Form is being submitted");
+      console.log("Submitted data:", data);
+    },
+    (errors) => {
+      console.log("Validation errors:", errors);
+    }
+  );
   return (
     <Form {...form}>
       <form onSubmit={onSubmit}>
@@ -110,14 +115,14 @@ const AddBillEntryForm = ({
 
               <SearchableTextField
                 form={form}
-                name="customer.name"
+                name="customerId"
                 label="Customer"
                 searchList={customers}
               />
 
               <SearchableTextField
                 form={form}
-                name="supplier.name"
+                name="supplierId"
                 label="Supplier"
                 searchList={suppliers}
               />
@@ -184,7 +189,7 @@ const AddBillEntryForm = ({
 
               <SearchableTextField
                 form={form}
-                name="transport.name"
+                name="transportId"
                 label="Transport"
                 searchList={transports}
               />

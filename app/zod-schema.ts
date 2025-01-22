@@ -32,16 +32,17 @@ export const billEntrySchema = z.object({
   }, z.date()),
   billNumber: z.string().min(3).max(25),
 
-  customer: customerSchema,
-  supplier: supplierSchema,
-  transport: transportSchema,
-
+  customerId: z.number().int().positive(),
+  supplierId: z.number().int().positive(),
+  transportId: z.number().int().positive(),
   productQty: z.preprocess(
     (arg) => parseFloat(arg as string),
     z.number().min(1)
   ),
   lrNumber: z.string().min(3).max(25),
-  lrDate: z.date(),
+  lrDate: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
 
   fright: z.preprocess((arg) => parseFloat(arg as string), z.number().min(1)),
   netAmount: z.preprocess(

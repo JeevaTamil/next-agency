@@ -64,10 +64,10 @@ const AddTransportForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Chennai"
+                    placeholder="Name of the transport"
                     onInput={(e) => {
                       e.currentTarget.value =
                         e.currentTarget.value.toUpperCase();
