@@ -26,6 +26,8 @@ export const transportSchema = z.object({
   name: z.string().min(3).max(25),
 });
 
+export const taxTypeEnum = z.enum(["C/S GST", "I GST"]);
+
 export const billEntrySchema = z.object({
   billDate: z.preprocess((arg) => {
     if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
@@ -44,12 +46,12 @@ export const billEntrySchema = z.object({
     if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
   }, z.date()),
 
-  fright: z.preprocess((arg) => parseFloat(arg as string), z.number().min(1)),
+  freight: z.preprocess((arg) => parseFloat(arg as string), z.number().min(1)),
   netAmount: z.preprocess(
     (arg) => parseFloat(arg as string),
     z.number().min(1)
   ),
-  taxType: z.string().min(3).max(10),
+  taxType: taxTypeEnum,
   grossAmount: z.preprocess(
     (arg) => parseFloat(arg as string),
     z.number().min(1)

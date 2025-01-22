@@ -7,7 +7,6 @@ const NewBillEntryPage = async () => {
   const customers = await prisma.customer.findMany();
   const suppliers = await prisma.supplier.findMany();
   const transports = await prisma.transport.findMany();
-  console.log(customers);
 
   return (
     <Card className="max-w-5xl">

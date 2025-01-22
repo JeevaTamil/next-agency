@@ -45,7 +45,7 @@ model Transport {
 
 model BillEntry {
   id         Int      @id @default(autoincrement())
-  billDate   DateTime
+  billDate   DateTime @db.Date()
   billNumber String   @db.VarChar(20)
 
   customerId Int      @db.Int
@@ -56,7 +56,7 @@ model BillEntry {
 
   productQty Int
   lrNumber   String   @db.VarChar(20)
-  lrDate     DateTime
+  lrDate     DateTime @db.Date()
 
   transportId Int       @db.Int
   transport   Transport @relation(fields: [transportId], references: [id])
@@ -64,11 +64,6 @@ model BillEntry {
   freight   Float
   netAmount Float
 
-  taxType     TaxType
+  taxType     String @db.VarChar(10)
   grossAmount Float
-}
-
-enum TaxType {
-  C_S_GST
-  IGST
 }

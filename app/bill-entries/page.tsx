@@ -6,16 +6,31 @@ import Link from "next/link";
 import React from "react";
 import { columns } from "./columns";
 import { prisma } from "@/prisma/client";
+import { format } from "date-fns";
 
 const BillEntriesPage = async () => {
   const billEntries = await prisma.billEntry.findMany({
     include: {
-      customer: true,
-      supplier: true,
+      customer: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      supplier: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      transport: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
-
-  console.log(billEntries);
 
   return (
     <Box>
@@ -36,7 +51,7 @@ const BillEntriesPage = async () => {
           </Button>
         </Box>
       </Box>
-      <DataTable columns={columns} data={billEntries} />
+      <DataTable columns={columns} data={billEntries} href="bill-entries" />
     </Box>
   );
 };

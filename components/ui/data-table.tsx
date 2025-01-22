@@ -15,15 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  href: String;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  href,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -61,7 +64,12 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <Link href={`${href}/${row.id}`}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Link>
                   </TableCell>
                 ))}
               </TableRow>

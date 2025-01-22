@@ -1,6 +1,10 @@
 "use client";
 
-import { billEntrySchema, transportSchema } from "@/app/zod-schema";
+import {
+  billEntrySchema,
+  taxTypeEnum,
+  transportSchema,
+} from "@/app/zod-schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -19,11 +23,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Customer, Supplier, Transport } from "@prisma/client";
 import { Box } from "@radix-ui/themes";
+import axios from "axios";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "./searchable-text-field";
@@ -42,13 +49,12 @@ const AddBillEntryForm = ({
   suppliers,
   transports,
 }: AddBillEntryFormProps) => {
-  const [customersOpen, setCustomersOpen] = useState(false);
-
   const form = useForm<billEntryFormData>({
     resolver: zodResolver(billEntrySchema),
   });
 
   const netAmount = form.watch("netAmount");
+  const router = useRouter();
 
   useEffect(() => {
     if (netAmount) {
@@ -63,6 +69,30 @@ const AddBillEntryForm = ({
     async (data) => {
       console.log("Form is being submitted");
       console.log("Submitted data:", data);
+      try {
+        await axios.post("/api/bill-entries", data).then((res) => {
+          if (res.status === 201) {
+            toast({
+              title: "Entry Created",
+              description: `Bill Entry has been added successfully`,
+            });
+            router.push("/bill-entries");
+            router.refresh();
+          } else {
+            toast({
+              title: "Error occured",
+              description: `${res}`,
+            });
+          }
+          console.log(res.data);
+        });
+      } catch (error) {
+        toast({
+          title: "Error occured",
+          description: `${(error as any).message}`,
+          variant: "destructive",
+        });
+      }
     },
     (errors) => {
       console.log("Validation errors:", errors);
@@ -198,10 +228,10 @@ const AddBillEntryForm = ({
             <Card className="p-5 space-y-4">
               <FormField
                 control={form.control}
-                name="fright"
+                name="freight"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fright</FormLabel>
+                    <FormLabel>Freight</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} placeholder="250.00" />
                     </FormControl>
@@ -240,8 +270,11 @@ const AddBillEntryForm = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="c_s_gst">C/S GST</SelectItem>
-                        <SelectItem value="i_gst">I GST</SelectItem>
+                        {taxTypeEnum.options.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>
