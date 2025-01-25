@@ -57,3 +57,20 @@ export const billEntrySchema = z.object({
     z.number().min(1)
   ),
 });
+
+export const paymentSchema = z.object({
+  // date: z.preprocess((arg) => {
+  //   if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  // }, z.date()),
+
+  billEntryId: z.number().int().positive(),
+  transactionAmount: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
+
+  bankId: z.number().int().positive(),
+
+  mode: z.string().min(3).max(25),
+  referenceNumber: z.string().min(3).max(25),
+});

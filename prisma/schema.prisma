@@ -66,4 +66,32 @@ model BillEntry {
 
   taxType     String @db.VarChar(10)
   grossAmount Float
+
+  payments Payment[]
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+
+  date DateTime @db.Date()
+
+  billEntryId Int       @db.Int
+  billEntry   BillEntry @relation(fields: [billEntryId], references: [id])
+
+  transactionAmount Float
+
+  bankId Int  @db.Int
+  bank   Bank @relation(fields: [bankId], references: [id])
+
+  mode            String @db.VarChar(10)
+  referenceNumber String @db.VarChar(30)
+
+  additionalNote String? @db.Text
+}
+
+model Bank {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  payments Payment[]
 }

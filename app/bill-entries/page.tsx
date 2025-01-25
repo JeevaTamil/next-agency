@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import { prisma } from "@/prisma/client";
 import { Box, Text } from "@radix-ui/themes";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import { columns } from "./columns";
-import { prisma } from "@/prisma/client";
-import { format } from "date-fns";
 
 const BillEntriesPage = async () => {
   const billEntries = await prisma.billEntry.findMany({
@@ -51,7 +49,7 @@ const BillEntriesPage = async () => {
           </Button>
         </Box>
       </Box>
-      <DataTable columns={columns} data={billEntries} href="bill-entries" />
+      <DataTable columns={columns} data={billEntries} />
     </Box>
   );
 };
