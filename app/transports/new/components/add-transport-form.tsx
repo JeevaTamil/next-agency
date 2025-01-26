@@ -51,7 +51,7 @@ const AddTransportForm = () => {
         variant: "destructive",
       });
     }
-    router.push("/suppliers");
+    router.push("/transports");
     router.refresh();
   });
 

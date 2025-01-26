@@ -10,7 +10,8 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL_MAC_PRO")
+  // url      = env("DATABASE_URL_MAC_PRO")
+  url      = env("DATABASE_URL_MAC_AIR")
 }
 
 model Customer {
