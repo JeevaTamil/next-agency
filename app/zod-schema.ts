@@ -74,3 +74,7 @@ export const paymentSchema = z.object({
   mode: z.string().min(3).max(25),
   referenceNumber: z.string().min(3).max(25),
 });
+
+export const bankSchema = z.object({
+  name: z.string().min(3).max(25),
+});

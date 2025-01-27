@@ -10,7 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BillEntryWithComputedProps } from "@/types/common-types";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 type paymentFormData = z.infer<typeof paymentSchema>;
 
@@ -112,7 +119,39 @@ const AddPaymentForm = ({
           <Box className="max-w-5xl">
             <h3 className="my-3">Add Payment</h3>
             <Card className="p-5 m-3 space-y-4">
-              
+              <Box className="grid grid-cols-3 gap-4">
+                <Box>
+                  <FormField
+                    control={form.control}
+                    name="transactionAmount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Transaction Amount</FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} placeholder="10000" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+
+                <Box>
+                  <FormField
+                    control={form.control}
+                    name="referenceNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Reference Number</FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} placeholder="" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+              </Box>
             </Card>
           </Box>
         </form>
