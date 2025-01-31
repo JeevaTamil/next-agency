@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Box } from "@radix-ui/themes";
 
-import { paymentSchema } from "@/app/zod-schema";
+import { paymentModeEnum, paymentSchema } from "@/app/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,21 +18,74 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import SearchableTextField from "./searchable-text-field";
+import { Bank } from "@prisma/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
-type paymentFormData = z.infer<typeof paymentSchema>;
+export type paymentFormData = z.infer<typeof paymentSchema>;
 
-const AddPaymentForm = ({
-  billEntry,
-}: {
+interface AddPaymentFormProps {
+  banks: Bank[];
   billEntry: BillEntryWithComputedProps;
-}) => {
+}
+
+const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
   const form = useForm<paymentFormData>({
     resolver: zodResolver(paymentSchema),
   });
 
-  const onSubmit = form.handleSubmit(() => {
-    console.log("form submitted");
-  });
+  const router = useRouter();
+
+  const onSubmit = form.handleSubmit(
+    async (data) => {
+      console.log("Form is being submitted");
+      console.log("Submitted data:", data);
+      try {
+        await axios
+          .post(`/api/bill-entries/${billEntry.id}/payments`, {
+            ...data,
+            billEntryId: billEntry.id,
+          })
+          .then((res) => {
+            if (res.status === 201) {
+              toast({
+                title: "Entry Created",
+                description: `Bill Entry has been added successfully`,
+              });
+              router.push(`/bill-entries/${billEntry.id}`);
+              router.refresh();
+            } else {
+              toast({
+                title: "Error occured",
+                description: `${res}`,
+              });
+            }
+            console.log(res.data);
+          });
+      } catch (error) {
+        toast({
+          title: "Error occured",
+          description: `${(error as any).message}`,
+          variant: "destructive",
+        });
+      }
+    },
+    (errors) => {
+      console.log("Validation errors:", errors);
+    }
+  );
 
   return (
     <Card className="p-5">
@@ -110,6 +163,17 @@ const AddPaymentForm = ({
                 value={billEntry.grossAmount}
               />
             </Box>
+            {billEntry.paidAmount > 0 && (
+              <Box>
+                <Label htmlFor="paidAmount">Paid Amount</Label>
+                <Input
+                  disabled
+                  type="text"
+                  id="paidAmount"
+                  value={billEntry.paidAmount}
+                />
+              </Box>
+            )}
           </Box>
         </Card>
       </Box>
@@ -123,6 +187,32 @@ const AddPaymentForm = ({
                 <Box>
                   <FormField
                     control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LR Date</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...field}
+                            value={
+                              field.value
+                                ? format(new Date(field.value), "yyyy-MM-dd")
+                                : ""
+                            }
+                            onChange={(e) =>
+                              field.onChange(new Date(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+                <Box>
+                  <FormField
+                    control={form.control}
                     name="transactionAmount"
                     render={({ field }) => (
                       <FormItem>
@@ -133,6 +223,14 @@ const AddPaymentForm = ({
                         <FormMessage />
                       </FormItem>
                     )}
+                  />
+                </Box>
+                <Box>
+                  <SearchableTextField
+                    form={form}
+                    name="bankId"
+                    label="Bank"
+                    searchList={banks}
                   />
                 </Box>
 
@@ -151,7 +249,81 @@ const AddPaymentForm = ({
                     )}
                   />
                 </Box>
+                <Box>
+                  <FormField
+                    control={form.control}
+                    name="mode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tax Type</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Payment Mode" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {paymentModeEnum.options.map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {option}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+                {/* <Box>
+                  <FormField
+                    control={form.control}
+                    name="billEntryId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bill Entry Id</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled
+                            type="text"
+                            {...field}
+                            placeholder=""
+                            value={billEntry.id}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box> */}
+
+                <Box className="col-start-1">
+                  <FormField
+                    control={form.control}
+                    name="additionalNote"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Additional Notes</FormLabel>
+                        <FormControl>
+                          <div>
+                            <Textarea
+                              {...field}
+                              placeholder="Type your message here."
+                              id="additionalNotes"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
               </Box>
+              <Button variant="default" type="submit">
+                Submit
+              </Button>
             </Card>
           </Box>
         </form>

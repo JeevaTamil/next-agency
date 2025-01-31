@@ -26,11 +26,12 @@ import {
 } from "@/components/ui/command";
 import { ChevronsUpDown, Check } from "lucide-react";
 import { CommonEntity } from "@/types/common-types";
-import { billEntryFormData } from "./add-bill-entry-form";
+
 import { Box } from "@radix-ui/themes";
+import { paymentFormData } from "./add-payment-form";
 
 type Props = {
-  form: UseFormReturn<billEntryFormData>;
+  form: UseFormReturn<paymentFormData>;
   name: string;
   label: string;
   searchList: CommonEntity[];
@@ -42,7 +43,7 @@ const SearchableTextField = ({ form, name, label, searchList }: Props) => {
   return (
     <Controller
       control={form.control}
-      name={name as keyof billEntryFormData}
+      name={name as keyof paymentFormData}
       render={({ field }) => (
         <FormItem>
           <Box className="grid space-y-4">
@@ -79,6 +80,15 @@ const SearchableTextField = ({ form, name, label, searchList }: Props) => {
                           )}
                         </CommandItem>
                       ))}
+                      {/* <CommandItem
+                        key="addNew"
+                        value="addNew"
+                        onSelect={() => {}}
+                      > */}
+                      {/* <Button className="w-full" variant="outline">
+                        Add New
+                      </Button> */}
+                      {/* </CommandItem> */}
                     </CommandGroup>
                   </CommandList>
                 </Command>

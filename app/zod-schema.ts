@@ -27,6 +27,7 @@ export const transportSchema = z.object({
 });
 
 export const taxTypeEnum = z.enum(["C/S GST", "I GST"]);
+export const paymentModeEnum = z.enum(["Cheque", "Cash", "NEFT", "UPI", "DD"]);
 
 export const billEntrySchema = z.object({
   billDate: z.preprocess((arg) => {
@@ -63,7 +64,13 @@ export const paymentSchema = z.object({
   //   if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
   // }, z.date()),
 
-  billEntryId: z.number().int().positive(),
+  // billEntryId: z.preprocess(
+  //   (arg) => parseInt(arg as string),
+  //   z.number().positive()
+  // ),
+  date: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
   transactionAmount: z.preprocess(
     (arg) => parseFloat(arg as string),
     z.number().min(1)
@@ -71,8 +78,9 @@ export const paymentSchema = z.object({
 
   bankId: z.number().int().positive(),
 
-  mode: z.string().min(3).max(25),
+  mode: paymentModeEnum,
   referenceNumber: z.string().min(3).max(25),
+  additionalNote: z.string(),
 });
 
 export const bankSchema = z.object({

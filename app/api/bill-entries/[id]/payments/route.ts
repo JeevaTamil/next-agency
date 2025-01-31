@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  console.log(body);
 
-  const validation = body.safeParse(paymentSchema);
+  const validation = paymentSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(
@@ -20,6 +21,6 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(
     { message: "Payment request added" },
-    { status: 200 }
+    { status: 201 }
   );
 }
