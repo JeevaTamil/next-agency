@@ -1,6 +1,5 @@
 import { prisma } from "@/prisma/client";
 import { Box } from "@radix-ui/themes";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import BillEntryTablePage from "../components/bill-entries-table";
 import { notFound } from "next/navigation";

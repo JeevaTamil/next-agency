@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { prisma } from "@/prisma/client";
 
 export const columns: ColumnDef<BillEntry>[] = [
   {
@@ -34,10 +35,12 @@ export const columns: ColumnDef<BillEntry>[] = [
     header: "Bill Number",
   },
   {
+    id: "Customer",
     accessorKey: "customer.name",
     header: "Customer",
   },
   {
+    id: "Supplier",
     accessorKey: "supplier.name",
     header: "Supplier",
   },
@@ -45,6 +48,7 @@ export const columns: ColumnDef<BillEntry>[] = [
     accessorKey: "netAmount",
     header: "Net Amount",
     cell: ({ row }) => {
+      row.getValue("unpaidDays");
       const netAmountWithSymbol = `₹ ${parseFloat(
         row.getValue("netAmount")
       ).toFixed(2)}`;
@@ -65,6 +69,26 @@ export const columns: ColumnDef<BillEntry>[] = [
       return <div>{grossAmountWithSymbol}</div>;
     },
   },
+  {
+    accessorKey: "unPaidDays",
+    header: "Un Paid Days",
+  },
+  // {
+  //   header: "Un Paid Amount",
+  //   cell: async ({ row }) => {
+  //     const payments = await prisma.payment.findMany({
+  //       where: {
+  //         billEntryId: row.getValue("id"),
+  //       },
+  //     });
+
+  //     const unPaidAmount =
+  //       parseInt(row.getValue("grossAmount")) -
+  //       payments.reduce((sum, p) => sum + p.transactionAmount, 0);
+
+  //     return unPaidAmount;
+  //   },
+  // },
   {
     id: "actions",
     cell: ({ row }) => {

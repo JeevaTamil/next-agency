@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { prisma } from "@/prisma/client";
+import { prisma, prismaExt } from "@/prisma/client";
 import { Box, Text } from "@radix-ui/themes";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
 import { columns } from "./columns";
+import { differenceInDays } from "date-fns";
 
 const BillEntriesPage = async () => {
-  const billEntries = await prisma.billEntry.findMany({
+  const billEntries = await prismaExt.billEntry.findMany({
     include: {
       customer: {
         select: {
@@ -30,6 +31,8 @@ const BillEntriesPage = async () => {
     },
   });
 
+  console.log(billEntries);
+
   return (
     <Box>
       <Box className="flex justify-between items-center">
@@ -49,7 +52,11 @@ const BillEntriesPage = async () => {
           </Button>
         </Box>
       </Box>
-      <DataTable columns={columns} data={billEntries} />
+      <DataTable
+        columns={columns}
+        data={billEntries}
+        filterColumn={["Customer", "Supplier"]}
+      />
     </Box>
   );
 };
