@@ -21,6 +21,11 @@ import {
 import dynamic from "next/dynamic";
 import React from "react";
 import { Button } from "./button";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { BillEntry } from "@prisma/client";
+import { Box } from "@radix-ui/themes";
+import { format } from "date-fns";
 
 const DataTableFilter = dynamic(() => import("./data-table-filter"));
 
@@ -39,6 +44,54 @@ export function DataTable<TData, TValue>({
     []
   );
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    // Set up header (example)
+    doc.setFontSize(18);
+    doc.text("My DataTable", 14, 20); // Title of the document
+
+    // Add table header
+    doc.setFontSize(12);
+    const headers = columns
+      .flatMap((column) => {
+        console.log(`column headers : ${column.header}`);
+        if (column != undefined) {
+          return `${column.header}`;
+        }
+        return [];
+      })
+      .filter((header) => header !== undefined)
+      .slice(0, -1);
+    // const columnWidths = [60, 40, 80]; // Adjust based on your table columns
+
+    autoTable(doc, {
+      theme: "grid",
+      head: [headers],
+      headStyles: {
+        halign: "center",
+        valign: "middle",
+      },
+      body: table.getRowModel().rows.map((row) => {
+        const entry = row.original as BillEntry;
+        return [
+          entry.id.toString(),
+          format(new Date(entry.billDate), "dd-MM-yyyy"),
+          entry.billNumber.toString(),
+          entry.customer.name.toString(),
+          entry.supplier.name.toString(),
+          entry.netAmount.toString(),
+          entry.taxType.toString(),
+          entry.grossAmount.toString(),
+          entry.unPaidDays.toString(),
+        ];
+      }),
+      startY: 30,
+      margin: { top: 30 },
+    });
+
+    doc.save("table.pdf");
+  };
+
   const table = useReactTable({
     data,
     columns,
@@ -53,8 +106,14 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <DataTableFilter filterColumn={filterColumn ?? []} table={table} />
-
+      <Box className="flex justify-between items-center">
+        <DataTableFilter filterColumn={filterColumn ?? []} table={table} />
+        <Box>
+          <Button variant="outline" onClick={generatePDF}>
+            Generate Report
+          </Button>
+        </Box>
+      </Box>
       <div className="rounded-md border mt-5">
         <Table>
           <TableHeader>
