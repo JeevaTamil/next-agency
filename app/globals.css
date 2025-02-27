@@ -96,3 +96,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+h3 {
+  font-size: large;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: xx-large;
+  font-weight: 800;
+}

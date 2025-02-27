@@ -22,3 +22,18 @@ export async function POST(request: NextRequest) {
     { status: 201 }
   );
 }
+
+export async function GET() {
+  const customers = await prisma.customer.findMany({
+    include: {
+      bills: true,
+    },
+  });
+
+  return NextResponse.json(
+    {
+      data: customers,
+    },
+    { status: 200 }
+  );
+}

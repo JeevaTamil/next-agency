@@ -32,12 +32,23 @@ const AddSupplierForm = () => {
   const onSubmit = form.handleSubmit(async (data) => {
     console.log(data);
     try {
-      await axios.post("/api/suppliers", { data }).then((res) => {
-        toast({
-          title: "Supplier Created",
-          description: `Supplier ${data.name} has been added successfully`,
-        });
-        console.log(res);
+      await axios.post("/api/suppliers", data).then((res) => {
+        if (res.status === 201) {
+          toast({
+            title: "Supplier Created",
+            description: `Supplier ${data.name} has been added successfully`,
+          });
+          router.push("/suppliers");
+          router.refresh();
+          console.log(res);
+        } else {
+          console.error(res.data.message);
+          toast({
+            title: "Error occured",
+            description: `${(res.data as any).message}`,
+            variant: "destructive",
+          });
+        }
       });
     } catch (error) {
       console.error(error);
@@ -47,8 +58,6 @@ const AddSupplierForm = () => {
         variant: "destructive",
       });
     }
-    router.push("/suppliers");
-    router.refresh();
   });
 
   return (

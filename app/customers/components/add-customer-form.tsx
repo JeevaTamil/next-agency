@@ -32,11 +32,20 @@ const AddCustomerForm = () => {
   const onSubmit = form.handleSubmit(async (data) => {
     try {
       await axios.post("/api/customers", data).then((res) => {
-        toast({
-          title: "Customer Created",
-          description: `Customer ${data.name} has been added successfully`,
-        });
-        console.log(res);
+        if (res.status === 201) {
+          toast({
+            title: "Customer Created",
+            description: `Customer ${data.name} has been added successfully`,
+          });
+          router.push("/customers");
+          router.refresh();
+        } else {
+          toast({
+            title: "Error occured",
+            description: `${(res.data as any).message}`,
+            variant: "destructive",
+          });
+        }
       });
     } catch (error) {
       toast({
@@ -45,8 +54,6 @@ const AddCustomerForm = () => {
         variant: "destructive",
       });
     }
-    router.push("/customers");
-    router.refresh();
   });
 
   return (

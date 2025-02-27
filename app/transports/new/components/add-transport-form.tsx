@@ -1,6 +1,5 @@
 "use client";
 
-import { transportSchema } from "@/app/zod-schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,11 +11,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Box } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { transportSchema } from "@/app/zod-schema";
 import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -51,7 +51,7 @@ const AddTransportForm = () => {
         variant: "destructive",
       });
     }
-    router.push("/suppliers");
+    router.push("/transports");
     router.refresh();
   });
 
@@ -64,10 +64,10 @@ const AddTransportForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Chennai"
+                    placeholder="Name of the transport"
                     onInput={(e) => {
                       e.currentTarget.value =
                         e.currentTarget.value.toUpperCase();
