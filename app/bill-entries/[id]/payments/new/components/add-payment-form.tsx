@@ -190,7 +190,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                     name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>LR Date</FormLabel>
+                        <FormLabel>Transaction Date</FormLabel>
                         <FormControl>
                           <Input
                             type="date"

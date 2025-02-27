@@ -59,29 +59,34 @@ export const billEntrySchema = z.object({
   ),
 });
 
-export const paymentSchema = z.object({
-  // date: z.preprocess((arg) => {
-  //   if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-  // }, z.date()),
+export const paymentSchema = z
+  .object({
+    date: z.preprocess((arg) => {
+      if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+    }, z.date()),
 
-  // billEntryId: z.preprocess(
-  //   (arg) => parseInt(arg as string),
-  //   z.number().positive()
-  // ),
-  date: z.preprocess((arg) => {
-    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-  }, z.date()),
-  transactionAmount: z.preprocess(
-    (arg) => parseFloat(arg as string),
-    z.number().min(1)
-  ),
+    transactionAmount: z.preprocess(
+      (arg) => parseFloat(arg as string),
+      z.number().min(1)
+    ),
 
-  bankId: z.number().int().positive(),
+    bankId: z.number().int().positive().optional(), // Initially optional
 
-  mode: paymentModeEnum,
-  referenceNumber: z.string().min(3).max(25),
-  additionalNote: z.string(),
-});
+    mode: paymentModeEnum,
+
+    referenceNumber: z.string().min(3).max(25).optional(), // Optional
+    additionalNote: z.string().optional(), // Optional
+  })
+  .refine(
+    (data) => {
+      // Ensure bankId is required for non-cash payments
+      if (data.mode !== "Cash") {
+        return !!data.bankId;
+      }
+      return true;
+    },
+    { message: "Bank ID is required for non-cash payments", path: ["bankId"] }
+  );
 
 export const bankSchema = z.object({
   name: z.string().min(3).max(25),

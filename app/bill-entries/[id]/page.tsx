@@ -57,7 +57,7 @@ const BillEntryDetailPage = async ({ params }: { params: { id: string } }) => {
             </Link>
           </Button>
         </Box>
-        <Box className="p-5">
+        <Box>
           <PaymentsListPage billEntryId={params.id} />
         </Box>
       </Box>

@@ -21,4 +21,5 @@ export interface BillEntryWithComputedProps {
   supplier: { name: string };
   transport: { name: string };
   unPaidDays: number;
+  paidAmount: number;
 }

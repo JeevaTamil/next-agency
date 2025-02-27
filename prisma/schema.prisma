@@ -81,18 +81,18 @@ model Payment {
 
   transactionAmount Float
 
-  bankId Int  @db.Int
-  bank   Bank @relation(fields: [bankId], references: [id])
+  bankId Int?  @db.Int
+  bank   Bank? @relation(fields: [bankId], references: [id])
 
-  mode            String @db.VarChar(10)
-  referenceNumber String @db.VarChar(30)
+  mode            String  @db.VarChar(10)
+  referenceNumber String? @db.VarChar(30)
 
   additionalNote String? @db.Text
 }
 
 model Bank {
   id   Int    @id @default(autoincrement())
-  name String @db.VarChar(50) @unique
+  name String @unique @db.VarChar(50)
 
   payments Payment[]
 }

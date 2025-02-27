@@ -22,7 +22,7 @@ const PaymentsListPage = async ({ billEntryId }: { billEntryId: string }) => {
   console.log(payments);
 
   if (payments.length === 0) {
-    return <div>No Payments</div>;
+    return <div className="pt-5">No Payments</div>;
   }
 
   return (
