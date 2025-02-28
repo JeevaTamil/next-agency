@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box } from "@radix-ui/themes";
 import axios from "axios";
@@ -28,6 +29,17 @@ const AddCustomerForm = () => {
   const form = useForm<customerFormData>({
     resolver: zodResolver(customerSchema),
   });
+
+  const addDummyCustomer = () => {
+    form.setValue("name", faker.company.name());
+    form.setValue("city", faker.location.city());
+    form.setValue("address", faker.address.streetAddress());
+    form.setValue(
+      "phone",
+      `${faker.number.int({ min: 7000000000, max: 9999999999 })}`
+    );
+    form.setValue("gst", faker.string.alphanumeric(15).toUpperCase());
+  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -158,10 +170,15 @@ const AddCustomerForm = () => {
               </FormItem>
             )}
           />
+          <Box className="flex gap-x-5">
+            <Button variant="default" type="submit">
+              Submit
+            </Button>
 
-          <Button variant="default" type="submit">
-            Submit
-          </Button>
+            <Button variant="default" onClick={addDummyCustomer}>
+              Add Dummy Customer
+            </Button>
+          </Box>
         </Box>
       </form>
     </Form>

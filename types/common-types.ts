@@ -3,6 +3,12 @@ export interface CommonEntity {
   name: string;
 }
 
+export interface Players {
+  id: number;
+  name: string;
+  city: string;
+}
+
 export interface BillEntryWithComputedProps {
   id: number;
   billDate: Date;

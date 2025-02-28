@@ -21,8 +21,7 @@ import {
 import dynamic from "next/dynamic";
 import React from "react";
 import { Button } from "./button";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
 import { BillEntry } from "@prisma/client";
 import { Box } from "@radix-ui/themes";
 import { format } from "date-fns";
@@ -44,6 +43,7 @@ export function DataTable<TData, TValue>({
     []
   );
 
+  /*
   const generatePDF = () => {
     const doc = new jsPDF();
     // Set up header (example)
@@ -91,6 +91,7 @@ export function DataTable<TData, TValue>({
 
     doc.save("table.pdf");
   };
+  */
 
   const table = useReactTable({
     data,
@@ -104,15 +105,18 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  /*
+  <Box>
+  <Button variant="outline" onClick={generatePDF}>
+    Generate Report
+  </Button>
+  </Box>
+  */
+
   return (
     <div>
       <Box className="flex justify-between items-center">
         <DataTableFilter filterColumn={filterColumn ?? []} table={table} />
-        <Box>
-          <Button variant="outline" onClick={generatePDF}>
-            Generate Report
-          </Button>
-        </Box>
       </Box>
       <div className="rounded-md border mt-5">
         <Table>

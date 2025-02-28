@@ -1,5 +1,5 @@
 import { billEntrySchema } from "@/app/zod-schema";
-import { prisma } from "@/prisma/client";
+import { prisma, prismaExt } from "@/prisma/client";
 import { format } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,9 +31,14 @@ export async function POST(request: NextRequest) {
     }
   );
 }
-
 export async function GET(request: NextRequest) {
-  const billEntries = await prisma.billEntry.findMany({
+  const { searchParams } = new URL(request.url);
+  const customerId = searchParams.get("customerId");
+
+  const whereClause = customerId ? { customerId: parseInt(customerId) } : {};
+
+  const billEntries = await prismaExt.billEntry.findMany({
+    where: whereClause,
     include: {
       customer: {
         select: {
