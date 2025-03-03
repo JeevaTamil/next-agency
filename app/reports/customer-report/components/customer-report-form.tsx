@@ -18,9 +18,10 @@ export type reportFormData = z.infer<typeof reportSchema>;
 
 interface Params {
   customers: Customer[];
+  handleFormSubmit: (data: any) => void;
 }
 
-const CustomerReportForm = ({ customers }: Params) => {
+const CustomerReportForm = ({ customers, handleFormSubmit }: Params) => {
   const form = useForm<reportFormData>({
     resolver: zodResolver(reportSchema),
   });
@@ -30,6 +31,7 @@ const CustomerReportForm = ({ customers }: Params) => {
     console.log("Submitted data:", data);
     const billEntries = await fetchBillEntries(data.id);
     console.log(billEntries);
+    handleFormSubmit(billEntries);
   });
 
   const fetchBillEntries = async (customerId: number) => {
@@ -62,7 +64,6 @@ const CustomerReportForm = ({ customers }: Params) => {
                 Submit
               </Button>
 
-              <GeneratePdfReport />
             </Box>
           </form>
         </Form>

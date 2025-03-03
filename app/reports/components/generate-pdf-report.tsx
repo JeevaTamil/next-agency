@@ -6,14 +6,12 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import React, { useState } from "react";
 
-const GeneratePdfReport = () => {
-  const [formData, setFormData] = useState(null);
+interface Propes {
+  data: any;
+}
 
-  const handleFormSubmit = (data) => {
-    setFormData(data); // Store the form data in the parent state
-    console.log("Received from child:", data);
-  };
-
+const GeneratePdfReport = ({ data }: Propes) => {
+  console.log("Received from PDF generator:", data);
   let addressStartY = 20;
   const startX = 14;
 
