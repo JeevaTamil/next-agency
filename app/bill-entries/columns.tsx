@@ -31,6 +31,7 @@ export const columns: ColumnDef<BillEntry>[] = [
     },
   },
   {
+    id: "Bill Number",
     accessorKey: "billNumber",
     header: "Bill Number",
   },

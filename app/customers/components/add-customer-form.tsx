@@ -33,7 +33,7 @@ const AddCustomerForm = () => {
   const addDummyCustomer = () => {
     form.setValue("name", faker.company.name());
     form.setValue("city", faker.location.city());
-    form.setValue("address", faker.address.streetAddress());
+    form.setValue("address", faker.location.streetAddress());
     form.setValue(
       "phone",
       `${faker.number.int({ min: 7000000000, max: 9999999999 })}`

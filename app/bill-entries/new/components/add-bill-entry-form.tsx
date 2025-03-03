@@ -34,6 +34,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "./searchable-text-field";
+import { faker } from "@faker-js/faker";
 
 export type billEntryFormData = z.infer<typeof billEntrySchema>;
 type transportFormData = z.infer<typeof transportSchema>;
@@ -64,6 +65,36 @@ const AddBillEntryForm = ({
       form.setValue("grossAmount", 0);
     }
   }, [netAmount, form]);
+
+  const addDummyBillEntry = () => {
+    const billDate = faker.date.recent({ days: 90 });
+    const lrDate = new Date(billDate);
+    lrDate.setDate(lrDate.getDate() + 7);
+
+    form.setValue("customerId", faker.number.int({ min: 1, max: 5 }));
+    form.setValue("supplierId", faker.number.int({ min: 1, max: 5 }));
+    form.setValue("transportId", faker.number.int({ min: 1, max: 11 }));
+    form.setValue(
+      "billNumber",
+      `${faker.number.int({ min: 1111, max: 99999 })}`
+    );
+    form.setValue("billDate", billDate);
+    form.setValue("productQty", faker.number.int({ min: 1, max: 100 }));
+    form.setValue(
+      "lrNumber",
+      `${faker.number.int({ min: 1000000, max: 100000000 })}`
+    );
+    form.setValue("lrDate", lrDate);
+    form.setValue(
+      "freight",
+      parseFloat(faker.commerce.price({ min: 300, max: 1000 }))
+    );
+    form.setValue(
+      "netAmount",
+      parseFloat(faker.commerce.price({ min: 10000, max: 40000 }))
+    );
+    form.setValue("taxType", faker.helpers.arrayElement(taxTypeEnum.options));
+  };
 
   const onSubmit = form.handleSubmit(
     async (data) => {
@@ -301,9 +332,13 @@ const AddBillEntryForm = ({
               />
             </Card>
           </Box>
-
-          <Button variant="default" type="submit">
-            Submit
+          <Box className="flex space-x-4">
+            <Button variant="default" type="submit">
+              Submit
+            </Button>
+          </Box>
+          <Button variant="default" onClick={addDummyBillEntry}>
+            Add Dummy Bill Entry
           </Button>
         </Box>
       </form>
