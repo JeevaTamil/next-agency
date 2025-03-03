@@ -10,7 +10,154 @@ interface Propes {
   data: any;
 }
 
+type BillEntry = {
+  id: number;
+  billDate: string;
+  billNumber: string;
+  customerId: number;
+  supplierId: number;
+  productQty: number;
+  lrNumber: string;
+  lrDate: string;
+  transportId: number;
+  freight: number;
+  netAmount: number;
+  taxType: string;
+  grossAmount: number;
+  customer: { id: number; name: string };
+  supplier: { id: number; name: string };
+  transport: { id: number; name: string };
+  payments: {
+    id: number;
+    date: string;
+    billEntryId: number;
+    transactionAmount: number;
+    bankId: number;
+    mode: string;
+    referenceNumber: string;
+    additionalNote: string;
+  }[];
+  unPaidDays: number;
+  unPaidAmount: number;
+};
+
+type GroupedData = Record<number, BillEntry[]>;
+
+const groupBySupplierId = (data: BillEntry[]): GroupedData => {
+  return data.reduce((acc: GroupedData, entry: BillEntry) => {
+    const supplierId = entry.supplierId;
+    if (!acc[supplierId]) {
+      acc[supplierId] = [];
+    }
+    acc[supplierId].push(entry);
+    return acc;
+  }, {});
+};
+
 const GeneratePdfReport = ({ data }: Propes) => {
+  if (data === null) {
+    return <div></div>;
+  }
+
+  const groupedData = groupBySupplierId(data.data);
+  console.log("GroupedData", groupedData);
+
+  console.log("Received from PDF generator:", data.data);
+  let addressStartY = 20;
+  const startX = 14;
+
+  const addText = (doc: jsPDF, text: string) => {
+    doc.text(text, startX, getYPosition());
+  };
+
+  const getYPosition = () => {
+    addressStartY += 5;
+    return addressStartY;
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    // Set up header (example)
+    doc.setFontSize(15);
+    doc.text("Customer Report", 14, 14); // Title of the document
+
+    doc.outline;
+
+    const customer = data.data[0].customer;
+    // Header with customer details
+    doc.setFontSize(10);
+
+    addText(doc, `Customer Name: ${customer.name}`);
+    addText(doc, `City: ${customer.city}`);
+    addText(doc, `Contact: ${customer.phone}`);
+    const today = new Date().toLocaleDateString();
+    addText(doc, `Report generated on: ${today}`);
+
+    // Draw a line (optional, if desired)
+    const y = getYPosition();
+    doc.line(14, y, 200, y); // Example line position
+
+    // Start position for tables
+    let startY = getYPosition() - 5;
+
+    const headers = [
+      "S.No",
+      "Bill No",
+      "Bill Date",
+      "Supplier",
+      "Gross",
+      "Balance",
+      "Unpaid days",
+    ];
+
+    for (const [supplierId, bills] of Object.entries(groupedData)) {
+      console.log(`Supplier ID: ${supplierId}`);
+      let body: any[] = [];
+      bills.forEach((bill, index) => {
+        const row = [
+          index + 1,
+          bill.billNumber,
+          bill.billDate,
+          bill.supplier.name,
+          bill.grossAmount.toFixed(2),
+          bill.unPaidAmount.toFixed(2),
+          bill.unPaidDays.toString(),
+        ];
+        body.push(row);
+
+        console.log(`body`, body);
+        console.log(
+          `  Bill Number: ${bill.billNumber}, Gross Amount: ${bill.grossAmount}`
+        );
+      });
+      autoTable(doc, {
+        startY: startY + 5, // Small gap before the table
+        theme: "grid",
+        head: [headers],
+        headStyles: {
+          halign: "center",
+          valign: "middle",
+        },
+        body: body,
+        bodyStyles: {
+          halign: "center",
+          valign: "middle",
+        },
+      });
+      startY = (doc as any).lastAutoTable.finalY; // Move 10 units down for spacing
+    }
+
+    // doc.save("table.pdf");
+    doc.output("dataurlnewwindow"); // To check PDF generation
+  };
+
+  return (
+    <div>
+      <Button onClick={generatePDF}>Generate Report</Button>
+    </div>
+  );
+
+  /*
   console.log("Received from PDF generator:", data);
   let addressStartY = 20;
   const startX = 14;
@@ -113,6 +260,7 @@ const GeneratePdfReport = ({ data }: Propes) => {
       <Button onClick={generatePDF}>Generate Report</Button>
     </div>
   );
+  */
 };
 
 export default GeneratePdfReport;

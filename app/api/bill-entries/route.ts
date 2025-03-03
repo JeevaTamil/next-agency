@@ -40,32 +40,31 @@ export async function GET(request: NextRequest) {
   const billEntries = await prismaExt.billEntry.findMany({
     where: whereClause,
     include: {
-      customer: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      supplier: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      transport: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+      customer: true,
+      supplier: true,
+      transport: true,
+      payments: true,
     },
   });
 
-  const billEntriesFinal = billEntries.map((b) => ({
-    ...b,
-    billDate: format(new Date(b.billDate), "dd/MM/yyyy"),
-    lrDate: format(new Date(b.lrDate), "dd/MM/yyyy"),
-  }));
+  // const unPaidAmount =
+  //   billEntry.grossAmount -
+  //   billEntry.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
+
+  // return { ...billEntry, unPaidAmount };
+
+  const billEntriesFinal = billEntries.map((b) => {
+    const unPaidAmount =
+      b.grossAmount -
+      b.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
+
+    return {
+      ...b,
+      billDate: format(new Date(b.billDate), "dd/MM/yyyy"),
+      lrDate: format(new Date(b.lrDate), "dd/MM/yyyy"),
+      unPaidAmount,
+    };
+  });
 
   return NextResponse.json(
     {
