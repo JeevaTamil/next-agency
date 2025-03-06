@@ -2,7 +2,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { prisma } from "@/prisma/client";
 import React from "react";
 import { columns } from "./columns";
-import PaymentsListPage from "../components/payments-list-page";
+import PaymentsListPage from "./components/payments-list-page";
 import { Box, Text } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

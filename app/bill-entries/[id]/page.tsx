@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import PaymentsListPage from "./components/payments-list-page";
+import PaymentsListPage from "./payments/components/payments-list-page";
 
 interface Props {
   params: {
