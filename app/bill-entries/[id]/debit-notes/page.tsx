@@ -11,7 +11,7 @@ const DebitNotesPage = async ({ params }: { params: { id: string } }) => {
       <Box className="flex justify-between items-center">
         <Box>
           <Text>
-            <strong>Payments</strong>
+            <strong>Debit Notes</strong>
           </Text>
         </Box>
         <Box>

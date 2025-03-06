@@ -12,7 +12,7 @@ const DebitNoteListPage = async ({ billEntryId }: { billEntryId: string }) => {
   });
 
   if (debitNotes.length === 0) {
-    return <div className="pt-5">No Payments</div>;
+    return <div className="pt-5">No Debit Notes</div>;
   }
 
   return (
