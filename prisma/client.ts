@@ -16,23 +16,23 @@ export const prismaExt = prisma.$extends({
           return differenceInDays(new Date(), billEntry.billDate);
         },
       },
-      unPaidAmount: {
-        async compute(billEntry) {
-          const payments = await prisma.payment.findMany({
-            where: {
-              billEntryId: billEntry.id,
-            },
-          });
-
-          const unPaidAmount =
-            billEntry.grossAmount -
-            payments.reduce((sum, p) => sum + p.transactionAmount, 0);
-
-          return unPaidAmount;
-        },
-      },
     },
   },
 });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+export async function getBillEntryWithUnpaidAmount(id: number) {
+  const billEntry = await prisma.billEntry.findUnique({
+    where: { id },
+    include: { payments: true }, // Fetch related payments directly
+  });
+
+  if (!billEntry) return null;
+
+  const unPaidAmount =
+    billEntry.grossAmount -
+    billEntry.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
+
+  return { ...billEntry, unPaidAmount };
+}

@@ -52,7 +52,7 @@ const BillEntryDetailPage = async ({ params }: { params: { id: string } }) => {
             <Link href={`/bill-entries/${params.id}/payments/new`}>
               <Box className="flex items-center space-x-2">
                 <PlusSquare />
-                <span>Add Bill Entry</span>
+                <span>Add Payments</span>
               </Box>
             </Link>
           </Button>

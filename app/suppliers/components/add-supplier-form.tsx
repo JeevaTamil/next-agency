@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box } from "@radix-ui/themes";
 import axios from "axios";
@@ -28,6 +29,21 @@ const AddSupplierForm = () => {
   const form = useForm<supplierFormData>({
     resolver: zodResolver(supplierSchema),
   });
+
+  const addDummySupplier = () => {
+    form.setValue("name", faker.company.name());
+    form.setValue("city", faker.location.city());
+    form.setValue("address", faker.location.streetAddress());
+    form.setValue(
+      "phone",
+      `${faker.number.int({ min: 7000000000, max: 9999999999 })}`
+    );
+    form.setValue("gst", faker.string.alphanumeric(15).toUpperCase());
+    form.setValue(
+      "commission",
+      `${faker.number.float({ min: 3, max: 5, fractionDigits: 1 })}`
+    );
+  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     console.log(data);
@@ -183,9 +199,15 @@ const AddSupplierForm = () => {
             )}
           />
 
-          <Button variant="default" type="submit">
-            Submit
-          </Button>
+          <Box className="flex gap-x-5">
+            <Button variant="default" type="submit">
+              Submit
+            </Button>
+
+            <Button variant="default" onClick={addDummySupplier}>
+              Add Dummy Supplier
+            </Button>
+          </Box>
         </Box>
       </form>
     </Form>

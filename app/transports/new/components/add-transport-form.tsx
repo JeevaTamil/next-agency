@@ -19,6 +19,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { faker } from "@faker-js/faker";
 
 type transportFormData = z.infer<typeof transportSchema>;
 
@@ -28,6 +29,13 @@ const AddTransportForm = () => {
   const form = useForm<transportFormData>({
     resolver: zodResolver(transportSchema),
   });
+
+  const addDummyTransport = () => {
+    form.setValue(
+      "name",
+      faker.string.alpha({ length: { min: 3, max: 10 } }).toUpperCase()
+    );
+  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     console.log(data);
@@ -80,9 +88,14 @@ const AddTransportForm = () => {
             )}
           />
 
-          <Button variant="default" type="submit">
-            Submit
-          </Button>
+          <Box className="flex space-x-4">
+            <Button variant="default" type="submit">
+              Submit
+            </Button>
+            <Button variant="default" onClick={addDummyTransport}>
+              Add Dummy Transport
+            </Button>
+          </Box>
         </Box>
       </form>
     </Form>

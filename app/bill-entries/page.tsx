@@ -55,7 +55,7 @@ const BillEntriesPage = async () => {
       <DataTable
         columns={columns}
         data={billEntries}
-        filterColumn={["Customer", "Supplier"]}
+        filterColumn={["Customer", "Supplier", "Bill Number"]}
       />
     </Box>
   );
