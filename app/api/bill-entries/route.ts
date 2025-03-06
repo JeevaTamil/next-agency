@@ -34,11 +34,17 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const customerId = searchParams.get("customerId");
+  const supplierId = searchParams.get("supplierId");
 
-  const whereClause = customerId ? { customerId: parseInt(customerId) } : {};
+  const whereClauseCustomer = customerId
+    ? { customerId: parseInt(customerId) }
+    : {};
+  const whereClauseSupplier = supplierId
+    ? { supplierId: parseInt(supplierId) }
+    : {};
 
   const billEntries = await prismaExt.billEntry.findMany({
-    where: whereClause,
+    where: customerId ? whereClauseCustomer : whereClauseSupplier,
     include: {
       customer: true,
       supplier: true,
@@ -46,12 +52,6 @@ export async function GET(request: NextRequest) {
       payments: true,
     },
   });
-
-  // const unPaidAmount =
-  //   billEntry.grossAmount -
-  //   billEntry.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
-
-  // return { ...billEntry, unPaidAmount };
 
   const billEntriesFinal = billEntries.map((b) => {
     const unPaidAmount =

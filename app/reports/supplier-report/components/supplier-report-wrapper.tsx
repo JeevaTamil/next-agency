@@ -1,15 +1,15 @@
 "use client";
-import { Customer } from "@prisma/client";
+import { Customer, Supplier } from "@prisma/client";
 import React, { useState } from "react";
-import CustomerReportForm from "./customer-report-form";
+import SupplierReportForm from "./supplier-report-form";
 import GeneratePdfReport from "../../components/generate-pdf-report";
 import { Box } from "@radix-ui/themes";
 
 interface Params {
-  customers: Customer[];
+  suppliers: Supplier[];
 }
 
-const CustomerReportWrapper = ({ customers }: Params) => {
+const SupplierReportWrapper = ({ suppliers }: Params) => {
   const [formData, setFormData] = useState(null);
 
   const handleFormSubmit = (data: any) => {
@@ -20,15 +20,15 @@ const CustomerReportWrapper = ({ customers }: Params) => {
   return (
     <div>
       <Box className="grid space-y-4">
-        <CustomerReportForm
-          customers={customers}
+        <SupplierReportForm
+          suppliers={suppliers}
           handleFormSubmit={handleFormSubmit}
         />
 
-        <GeneratePdfReport data={formData} type="Customer" />
+        <GeneratePdfReport data={formData} type="Supplier" />
       </Box>
     </div>
   );
 };
 
-export default CustomerReportWrapper;
+export default SupplierReportWrapper;
