@@ -5,7 +5,6 @@ import { Box, Text } from "@radix-ui/themes";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
 import { columns } from "./columns";
-import { differenceInDays } from "date-fns";
 
 const BillEntriesPage = async () => {
   const billEntries = await prismaExt.billEntry.findMany({
@@ -30,8 +29,6 @@ const BillEntriesPage = async () => {
       },
     },
   });
-
-  console.log(billEntries);
 
   return (
     <Box>

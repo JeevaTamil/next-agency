@@ -28,4 +28,5 @@ export interface BillEntryWithComputedProps {
   transport: { name: string };
   unPaidDays: number;
   paidAmount: number;
+  debitNoteAmount: number;
 }

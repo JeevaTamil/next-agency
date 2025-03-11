@@ -29,21 +29,24 @@ import { CommonEntity } from "@/types/common-types";
 
 import { Box } from "@radix-ui/themes";
 import { paymentFormData } from "./add-payment-form";
+import { debitNoteFormData } from "../../../debit-notes/new/components/add-debit-note-form";
 
-type Props = {
-  form: UseFormReturn<paymentFormData>;
+import { FieldValues, Path } from "react-hook-form";
+
+type Props<T extends FieldValues> = {
+  form: UseFormReturn<T>;
   name: string;
   label: string;
   searchList: CommonEntity[];
 };
 
-const SearchableTextField = ({ form, name, label, searchList }: Props) => {
+const SearchableTextField = <T extends FieldValues>({ form, name, label, searchList }: Props<T>) => {
   const [selectedName, setSelectedName] = useState<string | null>(null);
 
   return (
     <Controller
       control={form.control}
-      name={name as keyof paymentFormData}
+      name={name as Path<T>}
       render={({ field }) => (
         <FormItem>
           <Box className="grid space-y-4">

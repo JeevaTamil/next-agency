@@ -29,7 +29,7 @@ export const columns: ColumnDef<DebitNote>[] = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              row.getValue("billEntryId")
+              {row.getValue("billEntryId")}
             </Link>
           </Button>
         </div>

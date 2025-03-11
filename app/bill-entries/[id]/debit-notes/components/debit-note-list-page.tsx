@@ -9,6 +9,13 @@ const DebitNoteListPage = async ({ billEntryId }: { billEntryId: string }) => {
     where: {
       billEntryId: parseInt(billEntryId),
     },
+    include: {
+      transport: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 
   if (debitNotes.length === 0) {

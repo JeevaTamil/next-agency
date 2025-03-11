@@ -1,13 +1,9 @@
-import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/prisma/client";
-import { Box } from "@radix-ui/themes";
 import { differenceInDays } from "date-fns";
-import { notFound } from "next/navigation";
-import BillEntryDetailCard from "./components/bill-entry-detail-card";
-import DebitNotesPage from "./debit-notes/page";
-import PaymentsPage from "./payments/page";
+import React from "react";
+import AddDebitNoteForm from "./components/add-debit-note-form";
 
-const BillEntryDetailPage = async ({ params }: { params: { id: string } }) => {
+const NewDebitNotePage = async ({ params }: { params: { id: string } }) => {
   const payments = await prisma.payment.findMany({
     where: {
       billEntryId: parseInt(params.id),
@@ -20,6 +16,7 @@ const BillEntryDetailPage = async ({ params }: { params: { id: string } }) => {
     },
   });
 
+  const transports = await prisma.transport.findMany();
   const billEntry = await prisma.billEntry.findUnique({
     where: {
       id: parseInt(params.id),
@@ -65,32 +62,15 @@ const BillEntryDetailPage = async ({ params }: { params: { id: string } }) => {
       debitNoteAmount,
     };
 
-    if (!billEntry) {
-      return notFound();
-    }
-
     return (
-      <Box>
-        <BillEntryDetailCard
-          params={{
-            billEntry: billEntryWithComputedProps,
-          }}
+      <div>
+        <AddDebitNoteForm
+          billEntry={billEntryWithComputedProps}
+          transports={transports}
         />
-        <Separator className="my-10" orientation="horizontal" />
-        <Box className="my-5 ">
-          <Box>
-            <PaymentsPage params={{ id: params.id }} />
-          </Box>
-
-          <Separator className="my-10" orientation="horizontal" />
-
-          <Box>
-            <DebitNotesPage params={{ id: params.id }} />
-          </Box>
-        </Box>
-      </Box>
+      </div>
     );
   }
 };
 
-export default BillEntryDetailPage;
+export default NewDebitNotePage;

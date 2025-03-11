@@ -2,7 +2,7 @@
 
 import { BillEntry } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
+import { differenceInDays, format, isWithinInterval } from "date-fns";
 
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { prisma } from "@/prisma/client";
+import { DataTableRowActions } from "@/components/ui/data-table-row-actions";
 
 export const columns: ColumnDef<BillEntry>[] = [
   {
@@ -28,6 +29,21 @@ export const columns: ColumnDef<BillEntry>[] = [
     cell: ({ row }) => {
       const billDate = format(new Date(row.getValue("billDate")), "dd/MM/yyyy");
       return <div>{billDate}</div>;
+    },
+    enableSorting: true,
+    sortingFn: (rowA, rowB, columnId) => {
+      const dateA = new Date(rowA.getValue(columnId));
+      const dateB = new Date(rowB.getValue(columnId));
+      return dateA.getTime() - dateB.getTime();
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true; // No filter applied
+      const billDate = new Date(row.getValue(columnId));
+      const [start, end] = filterValue || [];
+
+      if (start && billDate < new Date(start)) return false;
+      if (end && billDate > new Date(end)) return false;
+      return true;
     },
   },
   {
@@ -46,6 +62,7 @@ export const columns: ColumnDef<BillEntry>[] = [
     header: "Supplier",
   },
   {
+    // id: "Net Amount",
     accessorKey: "netAmount",
     header: "Net Amount",
     cell: ({ row }) => {
@@ -57,10 +74,12 @@ export const columns: ColumnDef<BillEntry>[] = [
     },
   },
   {
+    id: "Tax Type",
     accessorKey: "taxType",
     header: "Tax Type",
   },
   {
+    // id: "Gross Amount",
     accessorKey: "grossAmount",
     header: "Gross Amount",
     cell: ({ row }) => {
@@ -71,60 +90,19 @@ export const columns: ColumnDef<BillEntry>[] = [
     },
   },
   {
+    id: "unpaidDays",
     accessorKey: "unPaidDays",
     header: "Un Paid Days",
+
+    // cell: ({ row }) => {
+    //   const billDate = row.getValue("billDate") as Date;
+    //   const unPaidDays = differenceInDays(new Date(), billDate);
+    //   return <div className="flex items-center">{unPaidDays}</div>;
+    // },
+    // enableHiding: true,
   },
-  // {
-  //   header: "Un Paid Amount",
-  //   cell: async ({ row }) => {
-  //     const payments = await prisma.payment.findMany({
-  //       where: {
-  //         billEntryId: row.getValue("id"),
-  //       },
-  //     });
-
-  //     const unPaidAmount =
-  //       parseInt(row.getValue("grossAmount")) -
-  //       payments.reduce((sum, p) => sum + p.transactionAmount, 0);
-
-  //     return unPaidAmount;
-  //   },
-  // },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const router = useRouter();
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                const rowItemId = row.getValue("id");
-                console.log(row.getAllCells());
-                router.push(`/bill-entries/${rowItemId}`);
-              }}
-            >
-              View Details
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                const rowItemId = row.getValue("id");
-                router.push(`/bill-entries/${rowItemId}/payments`);
-              }}
-            >
-              Payments
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
