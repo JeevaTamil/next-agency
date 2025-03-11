@@ -25,8 +25,8 @@ type BillEntry = {
   netAmount: number;
   taxType: string;
   grossAmount: number;
-  customer: { id: number; name: string };
-  supplier: { id: number; name: string };
+  customer: { id: number; name: string; city: string; phone: string };
+  supplier: { id: number; name: string; city: string; phone: string };
   transport: { id: number; name: string };
   payments: {
     id: number;
@@ -94,7 +94,7 @@ const GeneratePdfReport = ({ data, type }: Propes) => {
     const doc = new jsPDF();
     // Set up header (example)
     doc.setFontSize(15);
-    doc.text("Customer Report", 14, 14); // Title of the document
+    doc.text(`${type} Report`, 14, 14); // Title of the document
 
     doc.outline;
 
@@ -140,11 +140,15 @@ const GeneratePdfReport = ({ data, type }: Propes) => {
       let totalGross = 0;
       let totalUnpaid = 0;
       bills.forEach((bill, index) => {
+        const partyName =
+          type === "Customer"
+            ? `${bill.supplier.name},${bill.supplier.city} `
+            : `${bill.customer.name},${bill.customer.city} `;
         const row = [
           index + 1,
           bill.billNumber,
           bill.billDate,
-          type === "Customer" ? bill.supplier.name : bill.customer.name,
+          partyName,
           bill.grossAmount.toFixed(2),
           bill.unPaidAmount.toFixed(2),
           bill.unPaidDays.toString(),

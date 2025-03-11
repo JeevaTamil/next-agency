@@ -1,25 +1,30 @@
 "use client";
 
+import { debitNoteSchema, taxTypeEnum } from "@/app/zod-schema";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Box } from "@radix-ui/themes";
-
-import { paymentModeEnum, paymentSchema } from "@/app/zod-schema";
+import { BillEntryWithComputedProps } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Transport } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { BillEntryWithComputedProps } from "@/types/common-types";
+import BillEntryDetailCard from "../../../components/bill-entry-detail-card";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import SearchableTextField from "./searchable-text-field";
-import { Bank } from "@prisma/client";
+import { Box } from "@radix-ui/themes";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import SearchableTextField from "../../../payments/new/components/searchable-text-field";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -28,28 +33,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { format } from "date-fns";
-import BillEntryDetailPage from "../../../page";
-import BillEntryDetailCard from "../../../components/bill-entry-detail-card";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
-export type paymentFormData = z.infer<typeof paymentSchema>;
+export type debitNoteFormData = z.infer<typeof debitNoteSchema>;
 
-interface AddPaymentFormProps {
-  banks: Bank[];
+interface AddDebitNoteFormProps {
+  transports: Transport[];
   billEntry: BillEntryWithComputedProps;
 }
 
-const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
-  const form = useForm<paymentFormData>({
-    resolver: zodResolver(paymentSchema),
+const AddDebitNoteForm = ({ billEntry, transports }: AddDebitNoteFormProps) => {
+  const form = useForm<debitNoteFormData>({
+    resolver: zodResolver(debitNoteSchema),
   });
-
-  const router = useRouter();
 
   const onSubmit = form.handleSubmit(
     async (data) => {
@@ -57,7 +62,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
       console.log("Submitted data:", data);
       try {
         await axios
-          .post(`/api/bill-entries/${billEntry.id}/payments`, {
+          .post(`/api/bill-entries/${billEntry.id}/debit-notes`, {
             ...data,
             billEntryId: billEntry.id,
           })
@@ -65,7 +70,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
             if (res.status === 201) {
               toast({
                 title: "Entry Created",
-                description: `Payment has been added successfully`,
+                description: `Debit Note has been added successfully`,
               });
               router.push(`/bill-entries/${billEntry.id}`);
               router.refresh();
@@ -90,6 +95,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
     }
   );
 
+  const router = useRouter();
   return (
     <Card className="p-5">
       <Box className="max-w-5xl">
@@ -154,7 +160,6 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                 value={billEntry.grossAmount}
               />
             </Box>
-
             {billEntry.paidAmount > 0 && (
               <Box>
                 <Label htmlFor="debitNoteReturnAmount">
@@ -208,7 +213,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <Box className="max-w-5xl">
-            <h3 className="my-3">Add Payment</h3>
+            <h3 className="my-3">Add Debit Note</h3>
             <Card className="p-5 m-3 space-y-4">
               <Box className="grid grid-cols-3 gap-4">
                 <Box>
@@ -217,7 +222,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                     name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Transaction Date</FormLabel>
+                        <FormLabel>Date</FormLabel>
                         <FormControl>
                           <Input
                             type="date"
@@ -240,10 +245,10 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                 <Box>
                   <FormField
                     control={form.control}
-                    name="transactionAmount"
+                    name="returnAmount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Transaction Amount</FormLabel>
+                        <FormLabel>Return Amount</FormLabel>
                         <FormControl>
                           <Input type="number" {...field} placeholder="10000" />
                         </FormControl>
@@ -255,31 +260,79 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                 <Box>
                   <SearchableTextField
                     form={form}
-                    name="bankId"
-                    label="Bank"
-                    searchList={banks}
+                    name="transportId"
+                    label="Transport"
+                    searchList={transports}
                   />
                 </Box>
-
                 <Box>
                   <FormField
                     control={form.control}
-                    name="referenceNumber"
+                    name="productQty"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Reference Number</FormLabel>
+                        <FormLabel>Product Qty</FormLabel>
                         <FormControl>
-                          <Input type="text" {...field} placeholder="" />
+                          <Input type="number" {...field} placeholder="25" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </Box>
+
                 <Box>
                   <FormField
                     control={form.control}
-                    name="mode"
+                    name="lrDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LR Date</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...field}
+                            value={
+                              field.value
+                                ? format(new Date(field.value), "yyyy-MM-dd")
+                                : ""
+                            }
+                            onChange={(e) =>
+                              field.onChange(new Date(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+
+                <Box>
+                  <FormField
+                    control={form.control}
+                    name="lrNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LR Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            {...field}
+                            placeholder="253455"
+                            // onChange={(e) => field.onChange(parseInt(field.value))}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </Box>
+
+                <Box>
+                  <FormField
+                    control={form.control}
+                    name="taxType"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Tax Type</FormLabel>
@@ -289,11 +342,11 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select Payment Mode" />
+                              <SelectValue placeholder="Select Tax Type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {paymentModeEnum.options.map((option) => (
+                            {taxTypeEnum.options.map((option) => (
                               <SelectItem key={option} value={option}>
                                 {option}
                               </SelectItem>
@@ -304,27 +357,6 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                     )}
                   />
                 </Box>
-                {/* <Box>
-                  <FormField
-                    control={form.control}
-                    name="billEntryId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Bill Entry Id</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled
-                            type="text"
-                            {...field}
-                            placeholder=""
-                            value={billEntry.id}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </Box> */}
 
                 <Box className="col-start-1">
                   <FormField
@@ -359,4 +391,4 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
   );
 };
 
-export default AddPaymentForm;
+export default AddDebitNoteForm;

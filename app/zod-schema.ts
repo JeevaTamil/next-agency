@@ -95,3 +95,25 @@ export const bankSchema = z.object({
 export const reportSchema = z.object({
   id: z.number().int().positive(),
 });
+
+export const debitNoteSchema = z.object({
+  date: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
+  transportId: z.number().int().positive(),
+  productQty: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
+  lrNumber: z.string().min(3).max(25),
+  lrDate: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
+
+  returnAmount: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
+  taxType: taxTypeEnum,
+  additionalNote: z.string().optional(), // Optional
+});

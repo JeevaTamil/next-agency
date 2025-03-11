@@ -7,6 +7,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -19,14 +21,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./button";
 
-import { BillEntry } from "@prisma/client";
 import { Box } from "@radix-ui/themes";
-import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DatePickerWithRange } from "./date-picker-with-range";
 
 const DataTableFilter = dynamic(() => import("./data-table-filter"));
+const DateRangeFilter = dynamic(() => import("./date-range-filter"));
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,56 +46,8 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-  /*
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    // Set up header (example)
-    doc.setFontSize(18);
-    doc.text("My DataTable", 14, 20); // Title of the document
-
-    // Add table header
-    doc.setFontSize(12);
-    const headers = columns
-      .flatMap((column) => {
-        console.log(`column headers : ${column.header}`);
-        if (column != undefined) {
-          return `${column.header}`;
-        }
-        return [];
-      })
-      .filter((header) => header !== undefined)
-      .slice(0, -1);
-    // const columnWidths = [60, 40, 80]; // Adjust based on your table columns
-
-    autoTable(doc, {
-      theme: "grid",
-      head: [headers],
-      headStyles: {
-        halign: "center",
-        valign: "middle",
-      },
-      body: table.getRowModel().rows.map((row) => {
-        const entry = row.original as BillEntry;
-        return [
-          entry.id.toString(),
-          format(new Date(entry.billDate), "dd-MM-yyyy"),
-          entry.billNumber.toString(),
-          entry.customer.name.toString(),
-          entry.supplier.name.toString(),
-          entry.netAmount.toString(),
-          entry.taxType.toString(),
-          entry.grossAmount.toString(),
-          entry.unPaidDays.toString(),
-        ];
-      }),
-      startY: 30,
-      margin: { top: 30 },
-    });
-
-    doc.save("table.pdf");
-  };
-  */
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   const table = useReactTable({
     data,
@@ -100,23 +56,33 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
+      sorting,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 50,
+      },
     },
   });
 
-  /*
-  <Box>
-  <Button variant="outline" onClick={generatePDF}>
-    Generate Report
-  </Button>
-  </Box>
-  */
+  const handleDateChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+    table
+      .getColumn("billDate")
+      ?.setFilterValue(
+        range?.from || range?.to ? [range?.from, range?.to] : undefined
+      );
+  };
 
   return (
     <div>
-      <Box className="flex justify-between items-center">
+      <Box className="flex justify-between items-center pt-5">
         <DataTableFilter filterColumn={filterColumn ?? []} table={table} />
+        <DatePickerWithRange date={dateRange} onChange={handleDateChange} />
       </Box>
       <div className="rounded-md border mt-5">
         <Table>
@@ -125,13 +91,27 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
+                    <TableHead
+                      key={header.id}
+                      // onClick={header.column.getToggleSortingHandler()}
+                    >
+                      <DataTableColumnHeader
+                        key={header.id}
+                        column={header.column}
+                        title={
+                          typeof header.column.columnDef.header === "string"
+                            ? header.column.columnDef.header
+                            : ""
+                        }
+                      />
+                      {/* {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
+                      {header.column.getIsSorted() === "asc" ? " 🔼" : ""}
+                      {header.column.getIsSorted() === "desc" ? " 🔽" : ""} */}
                     </TableHead>
                   );
                 })}

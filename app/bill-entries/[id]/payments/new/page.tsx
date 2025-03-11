@@ -9,6 +9,12 @@ const NewPaymentPage = async ({ params }: { params: { id: string } }) => {
     },
   });
 
+  const debitNotes = await prisma.debitNote.findMany({
+    where: {
+      billEntryId: parseInt(params.id),
+    },
+  });
+
   const banks = await prisma.bank.findMany();
   const billEntry = await prisma.billEntry.findUnique({
     where: {
@@ -39,11 +45,21 @@ const NewPaymentPage = async ({ params }: { params: { id: string } }) => {
       paidAmount = payments.reduce((sum, p) => sum + p.transactionAmount, 0);
     }
 
+    let debitNoteAmount = 0;
+    if (debitNotes && debitNotes.length > 0) {
+      debitNoteAmount = debitNotes.reduce((sum, p) => sum + p.returnAmount, 0);
+    }
+
     const today = new Date();
     const billDate = new Date(billEntry.billDate);
     const unPaidDays = differenceInDays(today, billDate);
 
-    const billEntryWithComputedProps = { ...billEntry, unPaidDays, paidAmount };
+    const billEntryWithComputedProps = {
+      ...billEntry,
+      unPaidDays,
+      paidAmount,
+      debitNoteAmount,
+    };
 
     return (
       <div>

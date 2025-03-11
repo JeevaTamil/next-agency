@@ -35,6 +35,7 @@ model Supplier {
   commission String @db.VarChar(5)
 
   bills BillEntry[]
+  
 }
 
 model Transport {
@@ -42,6 +43,7 @@ model Transport {
   name String @db.VarChar(50)
 
   bills BillEntry[]
+  debitNotes DebitNote[]
 }
 
 model BillEntry {
@@ -68,7 +70,8 @@ model BillEntry {
   taxType     String @db.VarChar(10)
   grossAmount Float
 
-  payments Payment[]
+  payments   Payment[]
+  debitNotes DebitNote[]
 }
 
 model Payment {
@@ -95,4 +98,25 @@ model Bank {
   name String @unique @db.VarChar(50)
 
   payments Payment[]
+}
+
+model DebitNote {
+  id Int @id @default(autoincrement())
+
+  date DateTime @db.Date()
+
+  billEntryId Int       @db.Int
+  billEntry   BillEntry @relation(fields: [billEntryId], references: [id])
+
+  productQty  Int
+  lrNumber    String   @db.VarChar(20)
+  lrDate      DateTime @db.Date()
+
+  transportId Int      @db.Int
+  transport   Transport @relation(fields: [transportId], references: [id])
+
+  returnAmount Float
+  taxType      String @db.VarChar(10)
+
+  additionalNote String? @db.Text
 }
