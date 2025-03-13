@@ -11,7 +11,7 @@ const DataTableFilter = ({
   return (
     <Box className="grid grid-cols-3 max-w-xl">
       {filterColumn.map((e) => (
-        <div className="flex items-center pr-2 max-w-sm">
+        <div key={e} className="flex items-center pr-2 max-w-sm">
           <Input
             placeholder={`Filter ${e}...`}
             id={e}
