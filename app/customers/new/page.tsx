@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const NewCustomerPage = () => {
   return (
-    <Card className="max-w-md">
+    <Card className="max-w-5xl">
       <CardHeader>Add Customer</CardHeader>
-      <CardContent><AddCustomerForm /></CardContent>
+      <CardContent>
+        <AddCustomerForm />
+      </CardContent>
     </Card>
   );
 };

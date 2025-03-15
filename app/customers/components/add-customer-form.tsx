@@ -31,7 +31,7 @@ const AddCustomerForm = () => {
   });
 
   const addDummyCustomer = () => {
-    form.setValue("name", faker.company.name());
+    form.setValue("name", faker.company.name().substring(0, 20).toUpperCase());
     form.setValue("city", faker.location.city());
     form.setValue("address", faker.location.streetAddress());
     form.setValue(
@@ -75,106 +75,108 @@ const AddCustomerForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="max-w-md">
+      <form onSubmit={onSubmit}>
         <Box className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="ABC Firm"
-                    onInput={(e) => {
-                      e.currentTarget.value =
-                        e.currentTarget.value.toUpperCase();
-                    }}
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription>This is your public display name.</FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <Box className="grid grid-cols-3 gap-5">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="ABC Firm"
+                      onInput={(e) => {
+                        e.currentTarget.value =
+                          e.currentTarget.value.toUpperCase();
+                      }}
+                      {...field}
+                    />
+                  </FormControl>
+                  {/* <FormDescription>This is your public display name.</FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Chennai"
-                    onInput={(e) => {
-                      e.currentTarget.value =
-                        e.currentTarget.value.toUpperCase();
-                    }}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Chennai"
+                      onInput={(e) => {
+                        e.currentTarget.value =
+                          e.currentTarget.value.toUpperCase();
+                      }}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="123 st, xyz road"
-                    onInput={(e) => {
-                      e.currentTarget.value =
-                        e.currentTarget.value.toUpperCase();
-                    }}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="123 st, xyz road"
+                      onInput={(e) => {
+                        e.currentTarget.value =
+                          e.currentTarget.value.toUpperCase();
+                      }}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="987..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="987..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="gst"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>GST</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="BGFB34FR434"
-                    onInput={(e) => {
-                      e.currentTarget.value =
-                        e.currentTarget.value.toUpperCase();
-                    }}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="gst"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>GST</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="BGFB34FR434"
+                      onInput={(e) => {
+                        e.currentTarget.value =
+                          e.currentTarget.value.toUpperCase();
+                      }}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Box>
           <Box className="flex gap-x-5">
             <Button variant="default" type="submit">
               Submit
