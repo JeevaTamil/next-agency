@@ -64,6 +64,7 @@ model Transport {
 
 model BillEntry {
   id         Int      @id @default(autoincrement())
+  billId     String  @unique
   billDate   DateTime @db.Date()
   billNumber String   @db.VarChar(20)
 

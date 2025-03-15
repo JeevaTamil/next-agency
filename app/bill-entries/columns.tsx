@@ -8,7 +8,7 @@ import { DataTableRowActions } from "@/components/ui/data-table-row-actions";
 
 export const columns: ColumnDef<BillEntry>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "billId",
     header: "ID",
   },
   {
@@ -54,7 +54,6 @@ export const columns: ColumnDef<BillEntry>[] = [
     accessorKey: "netAmount",
     header: "Net Amount",
     cell: ({ row }) => {
-      row.getValue("unpaidDays");
       const netAmountWithSymbol = `₹ ${parseFloat(
         row.getValue("netAmount")
       ).toFixed(2)}`;
@@ -65,6 +64,16 @@ export const columns: ColumnDef<BillEntry>[] = [
     id: "Tax Type",
     accessorKey: "taxType",
     header: "Tax Type",
+  },
+  {
+    accessorKey: "taxAmount",
+    header: "Tax Amount",
+    cell: ({ row }) => {
+      const taxAmountWithSymbol = `₹ ${parseFloat(
+        row.getValue("taxAmount")
+      ).toFixed(2)}`;
+      return <div>{taxAmountWithSymbol}</div>;
+    },
   },
   {
     // id: "Gross Amount",

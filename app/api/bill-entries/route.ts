@@ -23,9 +23,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ✅ Get the current financial year (April to March)
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const financialYear =
+      now.getMonth() + 1 >= 4 ? currentYear % 100 : (currentYear - 1) % 100; // Example: 2024 → "24"
+
+    // ✅ Find the last billId for this financial year
+    const lastBill = await prisma.billEntry.findFirst({
+      where: {
+        billId: { startsWith: `${financialYear}/` },
+      },
+      orderBy: { id: "desc" }, // Get latest bill
+    });
+
+    // ✅ Get the next incremental number
+    const nextNumber = lastBill
+      ? parseInt(lastBill.billId.split("/")[1]) + 1
+      : 1;
+    const newBillId = `${financialYear}/${nextNumber}`; // ✅ Format: "24/1", "24/2"
+
     // Save the bill entry
     const billEntry = await prisma.billEntry.create({
-      data: body,
+      data: {
+        ...body,
+        billId: newBillId, // ✅ Assign custom ID
+      },
     });
 
     return NextResponse.json(
@@ -80,10 +103,11 @@ export async function GET(request: NextRequest) {
         b.grossAmount -
         b.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
 
+      const taxAmount = parseFloat((b.grossAmount * (5 / 100)).toFixed(2));
+
       return {
         ...b,
-        //billDate: format(new Date(b.billDate), "dd/MM/yyyy"),
-        //lrDate: format(new Date(b.lrDate), "dd/MM/yyyy"),
+        taxAmount,
         unPaidAmount,
       };
     });
