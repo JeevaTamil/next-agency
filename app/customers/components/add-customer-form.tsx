@@ -43,7 +43,12 @@ const AddCustomerForm = () => {
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      await axios.post("/api/customers", data).then((res) => {
+      const storedAgency = localStorage.getItem("agencyId");
+      const dataWithAgency = {
+        ...data,
+        agencyId: storedAgency ? Number(storedAgency) : 1,
+      };
+      await axios.post("/api/customers", dataWithAgency).then((res) => {
         if (res.status === 201) {
           toast({
             title: "Customer Created",

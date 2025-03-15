@@ -1,3 +1,5 @@
+"use client";
+
 import { DataTable } from "@/components/ui/data-table";
 import { prisma } from "@/prisma/client";
 import { columns } from "./columns";
@@ -5,9 +7,40 @@ import { Box, Container, Flex, Text } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
+import { useAgencyStore } from "@/store/agencyStore";
+import { useEffect, useState } from "react";
+import { Customer } from "@prisma/client";
+import axios from "axios";
 
-const CustomersPage = async () => {
-  const customers = await prisma.customer.findMany();
+const CustomersPage = () => {
+  // const customers = await prisma.customer.findMany();
+
+  const { agencyId } = useAgencyStore(); // ✅ Get agencyId from Zustand
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch customers when agencyId changes
+  useEffect(() => {
+    if (!agencyId) return;
+
+    async function fetchCustomers() {
+      console.log("Fetch customers for agencyId:", agencyId);
+      setLoading(true);
+      try {
+        const res = await axios.get(`/api/customers`, { params: { agencyId } });
+        const data = res.data.data;
+        console.log("Fetched customers data:", data);
+        setCustomers(data);
+      } catch (error) {
+        console.error("Failed to fetch customers:", error);
+        setCustomers([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCustomers();
+  }, [agencyId]); // ✅ Reloads when agencyId changes
 
   return (
     <Box>
@@ -28,7 +61,14 @@ const CustomersPage = async () => {
           </Button>
         </Box>
       </Box>
-      <DataTable columns={columns} data={customers} />
+      {loading ? (
+        <p>Loading customers...</p>
+      ) : customers.length > 0 ? (
+        <DataTable columns={columns} data={customers} />
+      ) : (
+        <p>No customers found for this agency.</p>
+      )}
+      {/* <DataTable columns={columns} data={customers} /> */}
     </Box>
   );
 };

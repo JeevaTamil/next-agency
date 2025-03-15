@@ -12,6 +12,7 @@ import { Home, ReceiptIndianRupee, Truck, Users, Users2 } from "lucide-react";
 import { Box } from "@radix-ui/themes";
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "@/components/mode-toggle";
+import AgencySelector from "./agency-selector";
 
 const NavBar = () => {
   const navItems = [
@@ -120,6 +121,9 @@ const NavBar = () => {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+      <Box className="ml-auto p-5">
+        <AgencySelector />
+      </Box>
       <NavigationMenu className="flex-auto">
         <Box className="p-5">
           <ModeToggle />

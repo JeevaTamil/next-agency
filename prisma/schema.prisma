@@ -14,6 +14,19 @@ datasource db {
   // url      = env("DATABASE_URL_MAC_AIR")
 }
 
+model Agency {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  customers   Customer[]
+  suppliers   Supplier[]
+  transports  Transport[]
+  billEntries BillEntry[]
+  payments    Payment[]
+  banks       Bank[]
+  debitNotes  DebitNote[]
+}
+
 model Customer {
   id      Int    @id @default(autoincrement())
   name    String @db.VarChar(50)
@@ -21,6 +34,9 @@ model Customer {
   city    String @db.VarChar(25)
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
+
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills BillEntry[]
 }
@@ -34,15 +50,20 @@ model Supplier {
   phone      String @db.VarChar(20)
   commission String @db.VarChar(5)
 
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
   bills BillEntry[]
-  
 }
 
 model Transport {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
 
-  bills BillEntry[]
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  bills      BillEntry[]
   debitNotes DebitNote[]
 }
 
@@ -52,17 +73,20 @@ model BillEntry {
   billNumber String   @db.VarChar(20)
 
   customerId Int      @db.Int
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   supplierId Int      @db.Int
-  supplier   Supplier @relation(fields: [supplierId], references: [id])
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
 
   productQty Int
   lrNumber   String   @db.VarChar(20)
   lrDate     DateTime @db.Date()
 
   transportId Int       @db.Int
-  transport   Transport @relation(fields: [transportId], references: [id])
+  transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
+
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   freight   Float
   netAmount Float
@@ -80,12 +104,15 @@ model Payment {
   date DateTime @db.Date()
 
   billEntryId Int       @db.Int
-  billEntry   BillEntry @relation(fields: [billEntryId], references: [id])
+  billEntry   BillEntry @relation(fields: [billEntryId], references: [id], onDelete: Cascade)
 
   transactionAmount Float
 
   bankId Int?  @db.Int
-  bank   Bank? @relation(fields: [bankId], references: [id])
+  bank   Bank? @relation(fields: [bankId], references: [id], onDelete: Cascade)
+
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   mode            String  @db.VarChar(10)
   referenceNumber String? @db.VarChar(30)
@@ -97,6 +124,9 @@ model Bank {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(50)
 
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
   payments Payment[]
 }
 
@@ -106,14 +136,17 @@ model DebitNote {
   date DateTime @db.Date()
 
   billEntryId Int       @db.Int
-  billEntry   BillEntry @relation(fields: [billEntryId], references: [id])
+  billEntry   BillEntry @relation(fields: [billEntryId], references: [id], onDelete: Cascade)
 
   productQty  Int
   lrNumber    String   @db.VarChar(20)
   lrDate      DateTime @db.Date()
 
   transportId Int      @db.Int
-  transport   Transport @relation(fields: [transportId], references: [id])
+  transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
+
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   returnAmount Float
   taxType      String @db.VarChar(10)

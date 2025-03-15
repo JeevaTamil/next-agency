@@ -92,6 +92,10 @@ export const bankSchema = z.object({
   name: z.string().min(3).max(25),
 });
 
+export const agencySchema = z.object({
+  name: z.string().min(3).max(25),
+});
+
 export const reportSchema = z.object({
   id: z.number().int().positive(),
 });
