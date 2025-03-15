@@ -1,6 +1,5 @@
-import React from "react";
-import AddSupplierForm from "../components/add-supplier-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import AddSupplierForm from "../components/add-supplier-form";
 
 const NewSupplierPage = () => {
   return (

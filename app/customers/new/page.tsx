@@ -1,6 +1,5 @@
-import React from "react";
-import AddCustomerForm from "../components/add-customer-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import AddCustomerForm from "../components/add-customer-form";
 
 const NewCustomerPage = () => {
   return (

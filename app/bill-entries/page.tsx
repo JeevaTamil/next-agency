@@ -2,15 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { prisma, prismaExt } from "@/prisma/client";
+import { useAgencyStore } from "@/store/agencyStore";
+import { BillEntry } from "@prisma/client";
 import { Box, Text } from "@radix-ui/themes";
+import axios from "axios";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import { columns } from "./columns";
-import { useAgencyStore } from "@/store/agencyStore";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { BillEntry } from "@prisma/client";
+import { columns } from "./columns";
 
 const BillEntriesPage = () => {
   const { agencyId } = useAgencyStore(); // ✅ Get agencyId from Zustand
@@ -41,29 +40,6 @@ const BillEntriesPage = () => {
 
     fetchBillEntries();
   }, [agencyId]);
-
-  // const billEntries = await prismaExt.billEntry.findMany({
-  //   include: {
-  //     customer: {
-  //       select: {
-  //         id: true,
-  //         name: true,
-  //       },
-  //     },
-  //     supplier: {
-  //       select: {
-  //         id: true,
-  //         name: true,
-  //       },
-  //     },
-  //     transport: {
-  //       select: {
-  //         id: true,
-  //         name: true,
-  //       },
-  //     },
-  //   },
-  // });
 
   return (
     <Box>

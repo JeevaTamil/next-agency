@@ -1,12 +1,10 @@
+import NavBar from "@/components/nav-bar";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Separator } from "@/components/ui/separator";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/app-sidebar";
-import NavBar from "@/components/nav-bar";
-import { Separator } from "@/components/ui/separator";
-import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 

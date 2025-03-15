@@ -6,8 +6,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { useState } from "react";
 import { Customer } from "@prisma/client";
+import { useState } from "react";
 
 interface SearchInputProps {
   searchList: Customer[];

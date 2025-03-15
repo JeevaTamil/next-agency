@@ -1,14 +1,14 @@
 "use client"; // ✅ Convert to Client Component
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useAgencyStore } from "@/store/agencyStore"; // ✅ Import Zustand store
-import { DataTable } from "@/components/ui/data-table";
-import { Box, Text } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { useAgencyStore } from "@/store/agencyStore"; // ✅ Import Zustand store
+import { Supplier } from "@prisma/client";
+import { Box, Text } from "@radix-ui/themes";
+import axios from "axios";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import { Supplier } from "@prisma/client";
+import { useEffect, useState } from "react";
 import { columns } from "./columns";
 
 export default function SuppliersPage() {

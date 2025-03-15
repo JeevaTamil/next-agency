@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
+import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Customer, Supplier, Transport } from "@prisma/client";
 import { Box } from "@radix-ui/themes";
@@ -34,7 +35,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "./searchable-text-field";
-import { faker } from "@faker-js/faker";
 
 export type billEntryFormData = z.infer<typeof billEntrySchema>;
 type transportFormData = z.infer<typeof transportSchema>;

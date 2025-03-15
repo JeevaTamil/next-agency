@@ -6,10 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Box } from "@radix-ui/themes";
 
 import { paymentModeEnum, paymentSchema } from "@/app/zod-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { BillEntryWithComputedProps } from "@/types/common-types";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,8 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import SearchableTextField from "./searchable-text-field";
-import { Bank } from "@prisma/client";
 import {
   Select,
   SelectContent,
@@ -27,16 +22,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { format } from "date-fns";
-import BillEntryDetailPage from "../../../page";
-import BillEntryDetailCard from "../../../components/bill-entry-detail-card";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+import { BillEntryWithComputedProps } from "@/types/common-types";
 import { faker } from "@faker-js/faker";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Bank } from "@prisma/client";
+import axios from "axios";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import SearchableTextField from "./searchable-text-field";
 
 export type paymentFormData = z.infer<typeof paymentSchema>;
 

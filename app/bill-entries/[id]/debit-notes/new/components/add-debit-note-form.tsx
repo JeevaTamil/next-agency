@@ -1,30 +1,18 @@
 "use client";
 
 import { debitNoteSchema, taxTypeEnum } from "@/app/zod-schema";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BillEntryWithComputedProps } from "@/types/common-types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Transport } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import BillEntryDetailCard from "../../../components/bill-entry-detail-card";
-import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
-import { Box } from "@radix-ui/themes";
 import { Input } from "@/components/ui/input";
-import { format } from "date-fns";
-import SearchableTextField from "../../../payments/new/components/searchable-text-field";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -32,17 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { BillEntryWithComputedProps } from "@/types/common-types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Transport } from "@prisma/client";
+import { Box } from "@radix-ui/themes";
+import axios from "axios";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import SearchableTextField from "../../../payments/new/components/searchable-text-field";
 
 export type debitNoteFormData = z.infer<typeof debitNoteSchema>;
 

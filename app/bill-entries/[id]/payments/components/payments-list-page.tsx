@@ -1,8 +1,6 @@
 import { DataTable } from "@/components/ui/data-table";
 import { prisma } from "@/prisma/client";
 import { Box } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
-import React from "react";
 import { columns } from "./columns";
 
 const PaymentsListPage = async ({ billEntryId }: { billEntryId: string }) => {

@@ -1,6 +1,5 @@
 import { prisma } from "@/prisma/client";
 import { differenceInDays } from "date-fns";
-import React from "react";
 import AddDebitNoteForm from "./components/add-debit-note-form";
 
 const NewDebitNotePage = async ({ params }: { params: { id: string } }) => {

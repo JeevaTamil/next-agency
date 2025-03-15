@@ -2,20 +2,8 @@
 
 import { BillEntry } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { differenceInDays, format, isWithinInterval } from "date-fns";
+import { format } from "date-fns";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { prisma } from "@/prisma/client";
 import { DataTableRowActions } from "@/components/ui/data-table-row-actions";
 
 export const columns: ColumnDef<BillEntry>[] = [

@@ -2,8 +2,12 @@
 
 import { useAgencyStore } from "@/store/agencyStore";
 import { Agency } from "@prisma/client";
+import { Separator } from "@radix-ui/react-separator";
+import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 import {
   Select,
   SelectContent,
@@ -13,10 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import axios from "axios";
-import Link from "next/link";
-import { Separator } from "@radix-ui/react-separator";
-import { Button } from "./ui/button";
 
 export default function AgencySelector() {
   const { agencyId, setAgencyId } = useAgencyStore();

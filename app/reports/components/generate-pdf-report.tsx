@@ -1,10 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { faker } from "@faker-js/faker";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import React, { useState } from "react";
 
 interface Propes {
   data: any;

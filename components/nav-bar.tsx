@@ -1,18 +1,17 @@
+import { ModeToggle } from "@/components/mode-toggle";
+import { Box } from "@radix-ui/themes";
+import { Home, ReceiptIndianRupee, Truck, Users, Users2 } from "lucide-react";
 import React from "react";
+import AgencySelector from "./agency-selector";
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  navigationMenuTriggerStyle,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuContent,
+  navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
-import { Home, ReceiptIndianRupee, Truck, Users, Users2 } from "lucide-react";
-import { Box } from "@radix-ui/themes";
-import { Separator } from "./ui/separator";
-import { ModeToggle } from "@/components/mode-toggle";
-import AgencySelector from "./agency-selector";
 
 const NavBar = () => {
   const navItems = [

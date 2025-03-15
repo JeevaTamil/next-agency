@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import { Home, Users, Users2 } from "lucide-react";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +12,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { Home, Users, Users2 } from "lucide-react";
 
 const AppSidebar = () => {
   const [activeMenu, setActiveMenu] = useState("");

@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Box } from "@radix-ui/themes";
 

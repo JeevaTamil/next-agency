@@ -1,14 +1,11 @@
 "use client";
 
-import { Box } from "@radix-ui/themes";
-import GeneratePdfReport from "../components/generate-pdf-report";
-import CustomerReportForm from "./components/customer-report-form";
-import { prisma } from "@/prisma/client";
-import { useEffect, useState } from "react";
-import CustomerReportWrapper from "./components/customer-report-wrapper";
-import axios from "axios";
 import { useAgencyStore } from "@/store/agencyStore";
 import { Customer } from "@prisma/client";
+import { Box } from "@radix-ui/themes";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import CustomerReportWrapper from "./components/customer-report-wrapper";
 
 const CustomerReport = async () => {
   // const customers = await prisma.customer.findMany();

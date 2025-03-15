@@ -1,9 +1,9 @@
 "use client";
 import { Customer } from "@prisma/client";
-import React, { useState } from "react";
-import CustomerReportForm from "./customer-report-form";
-import GeneratePdfReport from "../../components/generate-pdf-report";
 import { Box } from "@radix-ui/themes";
+import { useState } from "react";
+import GeneratePdfReport from "../../components/generate-pdf-report";
+import CustomerReportForm from "./customer-report-form";
 
 interface Params {
   customers: Customer[];

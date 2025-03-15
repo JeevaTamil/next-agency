@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import { prisma } from "@/prisma/client";
 import { Box, Text } from "@radix-ui/themes";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import { columns } from "./columns";
-import { DataTable } from "@/components/ui/data-table";
 
 const TransportPage = async () => {
   const transports = await prisma.transport.findMany();

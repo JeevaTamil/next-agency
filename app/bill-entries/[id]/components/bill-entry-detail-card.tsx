@@ -1,12 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { prisma } from "@/prisma/client";
 import { BillEntryWithComputedProps } from "@/types/common-types";
-import { BillEntry } from "@prisma/client";
 import { Box } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
-import React from "react";
 
 interface Props {
   params: {

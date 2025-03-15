@@ -1,21 +1,4 @@
-import React, { useState } from "react";
-import {
-  Controller,
-  UseFormReturn,
-  ControllerRenderProps,
-} from "react-hook-form";
-import {
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -24,9 +7,25 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { ChevronsUpDown, Check } from "lucide-react";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Players } from "@/types/common-types";
 import { Box } from "@radix-ui/themes";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
+import {
+  Controller,
+  UseFormReturn
+} from "react-hook-form";
 import { reportFormData } from "../customer-report/components/customer-report-form";
 
 type Props = {

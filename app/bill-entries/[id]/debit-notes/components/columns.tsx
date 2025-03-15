@@ -1,10 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { prisma } from "@/prisma/client";
 import { DebitNote } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
 

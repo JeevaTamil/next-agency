@@ -1,16 +1,15 @@
 "use client";
 
-import { DataTable } from "@/components/ui/data-table";
-import { prisma } from "@/prisma/client";
-import { columns } from "./columns";
-import { Box, Container, Flex, Text } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { useAgencyStore } from "@/store/agencyStore";
+import { Customer } from "@prisma/client";
+import { Box, Text } from "@radix-ui/themes";
+import axios from "axios";
 import { PlusSquare } from "lucide-react";
 import Link from "next/link";
-import { useAgencyStore } from "@/store/agencyStore";
 import { useEffect, useState } from "react";
-import { Customer } from "@prisma/client";
-import axios from "axios";
+import { columns } from "./columns";
 
 const CustomersPage = () => {
   // const customers = await prisma.customer.findMany();

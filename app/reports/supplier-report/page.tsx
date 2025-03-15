@@ -1,12 +1,11 @@
 "use client";
 
-import { Box } from "@radix-ui/themes";
-import { prisma } from "@/prisma/client";
-import SupplierReportWrapper from "./components/supplier-report-wrapper";
 import { useAgencyStore } from "@/store/agencyStore";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Supplier } from "@prisma/client";
+import { Box } from "@radix-ui/themes";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import SupplierReportWrapper from "./components/supplier-report-wrapper";
 
 const SupplierReport = () => {
   // const suppliers = await prisma.supplier.findMany();
