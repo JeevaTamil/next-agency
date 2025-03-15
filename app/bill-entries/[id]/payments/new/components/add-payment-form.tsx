@@ -36,6 +36,7 @@ import { format } from "date-fns";
 import BillEntryDetailPage from "../../../page";
 import BillEntryDetailCard from "../../../components/bill-entry-detail-card";
 import { Separator } from "@/components/ui/separator";
+import { faker } from "@faker-js/faker";
 
 export type paymentFormData = z.infer<typeof paymentSchema>;
 
@@ -50,6 +51,27 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
   });
 
   const router = useRouter();
+
+  const addDummyPayment = () => {
+    const balance = (
+      billEntry.grossAmount -
+      billEntry.paidAmount -
+      billEntry.debitNoteAmount
+    ).toFixed(2);
+
+    form.setValue("date", faker.date.soon({ days: 90 }));
+    form.setValue(
+      "transactionAmount",
+      parseFloat(faker.commerce.price({ min: 5000, max: parseFloat(balance) }))
+    );
+    form.setValue("bankId", faker.number.int({ min: 1, max: 3 }));
+    form.setValue(
+      "referenceNumber",
+      faker.number.int({ min: 100000, max: 999999 }).toString()
+    );
+    form.setValue("mode", faker.helpers.arrayElement(paymentModeEnum.options));
+    form.setValue("additionalNote", faker.lorem.sentence());
+  };
 
   const onSubmit = form.handleSubmit(
     async (data) => {
@@ -348,9 +370,14 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
                   />
                 </Box>
               </Box>
-              <Button variant="default" type="submit">
-                Submit
-              </Button>
+              <Box className="flex space-x-4">
+                <Button variant="default" type="submit">
+                  Submit
+                </Button>
+                <Button variant="default" onClick={addDummyPayment}>
+                  Add Dummy Payment
+                </Button>
+              </Box>
             </Card>
           </Box>
         </form>

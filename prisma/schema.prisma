@@ -20,10 +20,8 @@ model Agency {
 
   customers   Customer[]
   suppliers   Supplier[]
-  transports  Transport[]
   billEntries BillEntry[]
   payments    Payment[]
-  banks       Bank[]
   debitNotes  DebitNote[]
 }
 
@@ -59,9 +57,6 @@ model Supplier {
 model Transport {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
-
-  agencyId Int    @default(1) // Temporary default value
-  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills      BillEntry[]
   debitNotes DebitNote[]
@@ -123,9 +118,6 @@ model Payment {
 model Bank {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(50)
-
-  agencyId Int    @default(1) // Temporary default value
-  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   payments Payment[]
 }

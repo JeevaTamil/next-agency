@@ -22,3 +22,16 @@ export async function POST(request: NextRequest) {
     { status: 201 }
   );
 }
+
+export async function GET() {
+  try {
+    const transports = await prisma.transport.findMany(); // ✅ Fetch all transports
+    return NextResponse.json({ data: transports }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching transports:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch transports" },
+      { status: 500 }
+    );
+  }
+}

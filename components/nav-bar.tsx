@@ -36,6 +36,11 @@ const NavBar = () => {
       href: "/bill-entries",
       icon: ReceiptIndianRupee,
     },
+    {
+      label: "Banks",
+      href: "/banks",
+      icon: ReceiptIndianRupee,
+    },
   ];
 
   const reports = [

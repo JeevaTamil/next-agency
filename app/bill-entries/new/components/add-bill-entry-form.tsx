@@ -71,9 +71,9 @@ const AddBillEntryForm = ({
     const lrDate = new Date(billDate);
     lrDate.setDate(lrDate.getDate() + 7);
 
-    form.setValue("customerId", faker.number.int({ min: 1, max: 5 }));
-    form.setValue("supplierId", faker.number.int({ min: 1, max: 5 }));
-    form.setValue("transportId", faker.number.int({ min: 1, max: 11 }));
+    form.setValue("customerId", faker.number.int({ min: 1, max: 3 }));
+    form.setValue("supplierId", faker.number.int({ min: 1, max: 3 }));
+    form.setValue("transportId", faker.number.int({ min: 2, max: 3 }));
     form.setValue(
       "billNumber",
       `${faker.number.int({ min: 1111, max: 99999 })}`
@@ -101,7 +101,12 @@ const AddBillEntryForm = ({
       console.log("Form is being submitted");
       console.log("Submitted data:", data);
       try {
-        await axios.post("/api/bill-entries", data).then((res) => {
+        const storedAgency = localStorage.getItem("agencyId");
+        const dataWithAgency = {
+          ...data,
+          agencyId: storedAgency ? Number(storedAgency) : 1,
+        };
+        await axios.post("/api/bill-entries", dataWithAgency).then((res) => {
           if (res.status === 201) {
             toast({
               title: "Entry Created",

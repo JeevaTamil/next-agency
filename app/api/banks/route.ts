@@ -23,3 +23,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    const banks = await prisma.bank.findMany(); // ✅ Fetch all banks
+    return NextResponse.json({ data: banks }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching banks:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch banks" },
+      { status: 500 }
+    );
+  }
+}

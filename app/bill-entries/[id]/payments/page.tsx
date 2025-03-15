@@ -1,12 +1,8 @@
-import { DataTable } from "@/components/ui/data-table";
-import { prisma } from "@/prisma/client";
-import React from "react";
-import { columns } from "./columns";
-import PaymentsListPage from "./components/payments-list-page";
-import { Box, Text } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Box, Text } from "@radix-ui/themes";
 import { PlusSquare } from "lucide-react";
+import Link from "next/link";
+import PaymentsListPage from "./components/payments-list-page";
 
 const PaymentsPage = async ({ params }: { params: { id: string } }) => {
   return (
