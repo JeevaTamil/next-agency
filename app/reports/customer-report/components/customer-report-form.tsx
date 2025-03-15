@@ -13,6 +13,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import GeneratePdfReport from "../../components/generate-pdf-report";
+import { useAgencyStore } from "@/store/agencyStore";
 
 export type reportFormData = z.infer<typeof reportSchema>;
 
@@ -22,6 +23,8 @@ interface Params {
 }
 
 const CustomerReportForm = ({ customers, handleFormSubmit }: Params) => {
+  const { agencyId } = useAgencyStore();
+
   const form = useForm<reportFormData>({
     resolver: zodResolver(reportSchema),
   });
@@ -39,6 +42,7 @@ const CustomerReportForm = ({ customers, handleFormSubmit }: Params) => {
       const response = await axios.get(`/api/bill-entries`, {
         params: {
           customerId,
+          agencyId,
         },
       });
       return response.data;
@@ -63,7 +67,6 @@ const CustomerReportForm = ({ customers, handleFormSubmit }: Params) => {
               <Button variant="default" type="submit">
                 Submit
               </Button>
-
             </Box>
           </form>
         </Form>

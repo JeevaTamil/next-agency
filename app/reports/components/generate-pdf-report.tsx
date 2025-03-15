@@ -147,7 +147,7 @@ const GeneratePdfReport = ({ data, type }: Propes) => {
         const row = [
           index + 1,
           bill.billNumber,
-          bill.billDate,
+          (new Date(bill.billDate) as any).toLocaleDateString(),
           partyName,
           bill.grossAmount.toFixed(2),
           bill.unPaidAmount.toFixed(2),
