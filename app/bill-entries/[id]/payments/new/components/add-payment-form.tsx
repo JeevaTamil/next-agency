@@ -35,6 +35,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "./searchable-text-field";
+import { useAgencyStore } from "@/store/agencyStore";
 
 export type paymentFormData = z.infer<typeof paymentSchema>;
 
@@ -49,6 +50,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
   });
 
   const router = useRouter();
+  const { agencyId } = useAgencyStore();
 
   const addDummyPayment = () => {
     const balance = (
@@ -80,6 +82,7 @@ const AddPaymentForm = ({ billEntry, banks }: AddPaymentFormProps) => {
           .post(`/api/bill-entries/${billEntry.id}/payments`, {
             ...data,
             billEntryId: billEntry.id,
+            agencyId,
           })
           .then((res) => {
             if (res.status === 201) {

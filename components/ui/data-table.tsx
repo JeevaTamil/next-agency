@@ -36,12 +36,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterColumn?: string[];
+  dateRangeFilter?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterColumn,
+  dateRangeFilter,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -82,7 +84,12 @@ export function DataTable<TData, TValue>({
     <div>
       <Box className="flex justify-between items-center pt-5">
         <DataTableFilter filterColumn={filterColumn ?? []} table={table} />
-        <DatePickerWithRange date={dateRange} onChange={handleDateChange} />
+        {
+          // @ts-ignore
+          dateRangeFilter && (
+            <DatePickerWithRange date={dateRange} onChange={handleDateChange} />
+          )
+        }
       </Box>
       <div className="rounded-md border mt-5">
         <Table>

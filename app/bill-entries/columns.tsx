@@ -8,8 +8,13 @@ import { DataTableRowActions } from "@/components/ui/data-table-row-actions";
 
 export const columns: ColumnDef<BillEntry>[] = [
   {
-    accessorKey: "billId",
+    accessorKey: "id",
     header: "ID",
+    enableHiding: true,
+  },
+  {
+    accessorKey: "billId",
+    header: "Bill ID",
   },
   {
     accessorKey: "billDate",
@@ -90,13 +95,6 @@ export const columns: ColumnDef<BillEntry>[] = [
     id: "unpaidDays",
     accessorKey: "unPaidDays",
     header: "Un Paid Days",
-
-    // cell: ({ row }) => {
-    //   const billDate = row.getValue("billDate") as Date;
-    //   const unPaidDays = differenceInDays(new Date(), billDate);
-    //   return <div className="flex items-center">{unPaidDays}</div>;
-    // },
-    // enableHiding: true,
   },
   {
     id: "actions",

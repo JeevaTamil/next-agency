@@ -18,6 +18,8 @@ datasource db {
 model Agency {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 
   customers   Customer[]
   suppliers   Supplier[]
@@ -34,6 +36,9 @@ model Customer {
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
 
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
+
   agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
@@ -49,6 +54,9 @@ model Supplier {
   phone      String @db.VarChar(20)
   commission String @db.VarChar(5)
 
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
+
   agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
@@ -58,6 +66,9 @@ model Supplier {
 model Transport {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 
   bills      BillEntry[]
   debitNotes DebitNote[]
@@ -93,6 +104,9 @@ model BillEntry {
 
   payments   Payment[]
   debitNotes DebitNote[]
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model Payment {
@@ -115,6 +129,9 @@ model Payment {
   referenceNumber String? @db.VarChar(30)
 
   additionalNote String? @db.Text
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model Bank {
@@ -122,6 +139,8 @@ model Bank {
   name String @unique @db.VarChar(50)
 
   payments Payment[]
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model DebitNote {
@@ -146,4 +165,6 @@ model DebitNote {
   taxType      String @db.VarChar(10)
 
   additionalNote String? @db.Text
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }

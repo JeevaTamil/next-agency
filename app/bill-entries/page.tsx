@@ -10,6 +10,7 @@ import { PlusSquare } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { columns } from "./columns";
+import DateRangeFilter from "@/components/ui/date-range-filter";
 
 const BillEntriesPage = () => {
   const { agencyId } = useAgencyStore(); // ✅ Get agencyId from Zustand
@@ -67,6 +68,7 @@ const BillEntriesPage = () => {
           columns={columns}
           data={billEntries}
           filterColumn={["Customer", "Supplier", "Bill Number"]}
+          dateRangeFilter={true}
         />
       ) : (
         <p>No bill entries found for this agency.</p>
