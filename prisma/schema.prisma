@@ -10,8 +10,9 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL_MAC_PRO")
+  // url      = env("DATABASE_URL_MAC_PRO")
   // url      = env("DATABASE_URL_MAC_AIR")
+  url      = env("DATABASE_URL_MSI")
 }
 
 model Agency {
@@ -33,7 +34,7 @@ model Customer {
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills BillEntry[]
@@ -48,7 +49,7 @@ model Supplier {
   phone      String @db.VarChar(20)
   commission String @db.VarChar(5)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills BillEntry[]
@@ -81,7 +82,7 @@ model BillEntry {
   transportId Int       @db.Int
   transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   freight   Float
@@ -107,7 +108,7 @@ model Payment {
   bankId Int?  @db.Int
   bank   Bank? @relation(fields: [bankId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int  //  @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   mode            String  @db.VarChar(10)
@@ -131,14 +132,14 @@ model DebitNote {
   billEntryId Int       @db.Int
   billEntry   BillEntry @relation(fields: [billEntryId], references: [id], onDelete: Cascade)
 
-  productQty  Int
-  lrNumber    String   @db.VarChar(20)
-  lrDate      DateTime @db.Date()
+  productQty Int
+  lrNumber   String   @db.VarChar(20)
+  lrDate     DateTime @db.Date()
 
   transportId Int      @db.Int
   transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   returnAmount Float
