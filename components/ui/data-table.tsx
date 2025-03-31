@@ -48,6 +48,8 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
+  const isBillEntryPage = filterColumn?.includes("billId");
+  // const hideIdColumn = isBillEntryPage ? { id: false } : {};
 
   const table = useReactTable({
     data,
@@ -61,6 +63,9 @@ export function DataTable<TData, TValue>({
     state: {
       columnFilters,
       sorting,
+      // columnVisibility: {
+      //   id: false,
+      // },
     },
     initialState: {
       pagination: {

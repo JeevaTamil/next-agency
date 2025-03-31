@@ -45,9 +45,7 @@ const CustomersPage = () => {
     <Box>
       <Box className="flex justify-between items-center">
         <Box>
-          <Text>
-            <strong>Customers</strong>
-          </Text>
+        <h1 className="text-2xl font-bold mb-5">Customers</h1>
         </Box>
         <Box>
           <Button variant="outline">

@@ -121,3 +121,15 @@ export const debitNoteSchema = z.object({
   taxType: taxTypeEnum,
   additionalNote: z.string().optional(), // Optional
 });
+
+export const agentCommissionSchema = z.object({
+  date: z.preprocess((arg) => {
+    if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+  }, z.date()),
+  paymentId: z.number().int().positive(),
+  commissionAmount: z.preprocess(
+    (arg) => parseFloat(arg as string),
+    z.number().min(1)
+  ),
+  agencyId: z.number().int().positive(),
+});
