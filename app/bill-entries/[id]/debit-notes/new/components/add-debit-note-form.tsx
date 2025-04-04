@@ -9,7 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SearchableTextField from "../../../payments/new/components/searchable-text-field";
+import { useAgencyStore } from "@/store/agencyStore";
 
 export type debitNoteFormData = z.infer<typeof debitNoteSchema>;
 
@@ -46,6 +47,8 @@ const AddDebitNoteForm = ({ billEntry, transports }: AddDebitNoteFormProps) => {
     resolver: zodResolver(debitNoteSchema),
   });
 
+  const { agencyId } = useAgencyStore();
+
   const onSubmit = form.handleSubmit(
     async (data) => {
       console.log("Form is being submitted");
@@ -55,6 +58,7 @@ const AddDebitNoteForm = ({ billEntry, transports }: AddDebitNoteFormProps) => {
           .post(`/api/bill-entries/${billEntry.id}/debit-notes`, {
             ...data,
             billEntryId: billEntry.id,
+            agencyId,
           })
           .then((res) => {
             if (res.status === 201) {

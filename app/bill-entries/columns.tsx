@@ -98,13 +98,6 @@ export const columns: ColumnDef<BillEntry>[] = [
     id: "unpaidDays",
     accessorKey: "unPaidDays",
     header: "Un Paid Days",
-
-    // cell: ({ row }) => {
-    //   const billDate = row.getValue("billDate") as Date;
-    //   const unPaidDays = differenceInDays(new Date(), billDate);
-    //   return <div className="flex items-center">{unPaidDays}</div>;
-    // },
-    // enableHiding: true,
   },
   {
     id: "actions",

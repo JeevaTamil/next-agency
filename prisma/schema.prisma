@@ -10,13 +10,16 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL_MAC_PRO")
+  // url      = env("DATABASE_URL_MAC_PRO")
   // url      = env("DATABASE_URL_MAC_AIR")
+  url      = env("DATABASE_URL_MSI")
 }
 
 model Agency {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 
   customers   Customer[]
   suppliers   Supplier[]
@@ -34,7 +37,10 @@ model Customer {
   gst     String @db.VarChar(16)
   phone   String @db.VarChar(20)
 
-  agencyId Int    @default(1) // Temporary default value
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
+
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills BillEntry[]
@@ -49,7 +55,10 @@ model Supplier {
   phone      String @db.VarChar(20)
   commission String @db.VarChar(5)
 
-  agencyId Int    @default(1) // Temporary default value
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
+
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   bills BillEntry[]
@@ -58,6 +67,9 @@ model Supplier {
 model Transport {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 
   bills      BillEntry[]
   debitNotes DebitNote[]
@@ -82,7 +94,7 @@ model BillEntry {
   transportId Int       @db.Int
   transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   freight   Float
@@ -93,6 +105,9 @@ model BillEntry {
 
   payments   Payment[]
   debitNotes DebitNote[]
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model Payment {
@@ -108,7 +123,7 @@ model Payment {
   bankId Int?  @db.Int
   bank   Bank? @relation(fields: [bankId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int  //  @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   mode            String  @db.VarChar(10)
@@ -117,6 +132,9 @@ model Payment {
   agentCommission AgentCommission? 
 
   additionalNote String? @db.Text
+
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model Bank {
@@ -124,6 +142,8 @@ model Bank {
   name String @unique @db.VarChar(50)
 
   payments Payment[]
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model DebitNote {
@@ -134,20 +154,22 @@ model DebitNote {
   billEntryId Int       @db.Int
   billEntry   BillEntry @relation(fields: [billEntryId], references: [id], onDelete: Cascade)
 
-  productQty  Int
-  lrNumber    String   @db.VarChar(20)
-  lrDate      DateTime @db.Date()
+  productQty Int
+  lrNumber   String   @db.VarChar(20)
+  lrDate     DateTime @db.Date()
 
   transportId Int      @db.Int
   transport   Transport @relation(fields: [transportId], references: [id], onDelete: Cascade)
 
-  agencyId Int    @default(1) // Temporary default value
+  agencyId Int   // @default(1) // Temporary default value
   agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 
   returnAmount Float
   taxType      String @db.VarChar(10)
 
   additionalNote String? @db.Text
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @default(now())
 }
 
 model AgentCommission {

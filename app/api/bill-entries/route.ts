@@ -1,5 +1,6 @@
 import { billEntrySchema } from "@/app/zod-schema";
 import { prisma, prismaExt } from "@/prisma/client";
+import { create } from "domain";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -97,6 +98,7 @@ export async function GET(request: NextRequest) {
         payments: true,
         debitNotes: true,
       },
+      orderBy: { id: "desc" },
     });
 
     const billEntriesFinal = billEntries.map((b) => {
