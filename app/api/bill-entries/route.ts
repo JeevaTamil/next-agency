@@ -108,11 +108,13 @@ export async function GET(request: NextRequest) {
 
       const taxAmount = parseFloat((b.grossAmount * (5 / 100)).toFixed(2));
 
+      // if (unPaidAmount > 0) {
       return {
         ...b,
         taxAmount,
         unPaidAmount,
       };
+      // }
     });
 
     return NextResponse.json(

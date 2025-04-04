@@ -55,6 +55,12 @@ const NavBar = () => {
       href: "/reports/supplier-report",
       icon: Users2,
     },
+    {
+      id: "agent_commission_report",
+      label: "Agent Commission Report",
+      href: "/reports/agent-commission-report",
+      icon: Users2,
+    },
   ];
 
   const ListItem = React.forwardRef<

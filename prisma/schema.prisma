@@ -26,6 +26,7 @@ model Agency {
   billEntries BillEntry[]
   payments    Payment[]
   debitNotes  DebitNote[]
+  agecyCommissions AgentCommission[]
 }
 
 model Customer {
@@ -128,6 +129,8 @@ model Payment {
   mode            String  @db.VarChar(10)
   referenceNumber String? @db.VarChar(30)
 
+  agentCommission AgentCommission? 
+
   additionalNote String? @db.Text
 
   createdAt DateTime @default(now())
@@ -167,4 +170,18 @@ model DebitNote {
   additionalNote String? @db.Text
   createdAt DateTime @default(now())
   modifiedAt DateTime @default(now())
+}
+
+model AgentCommission {
+  id Int @id @default(autoincrement())
+
+  date DateTime @db.Date()
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  paymentId Int @unique
+  
+  commissionAmount Float
+
+  agencyId Int    @default(1) // Temporary default value
+  agency   Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 }

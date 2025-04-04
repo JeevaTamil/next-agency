@@ -40,8 +40,11 @@ type BillEntry = {
     id: number;
     date: string;
     billEntryId: number;
+    productQty: number;
+    lrNumber: number;
+    lrDate: string;
     returnAmount: number;
-    reason: string;
+    additionalNote: string;
   }[];
   unPaidDays: number;
   unPaidAmount: number;
@@ -131,12 +134,12 @@ const GeneratePdfReport = ({ data, type }: Propes) => {
 
     const headers = [
       "S.No",
-      "Bill No",
-      "Bill Date",
       type === "Customer" ? "Supplier" : "Customer",
+      "Bill Date",
+      "Bill No",
       "Gross",
-      "Debit Note",
-      "Part Payment",
+      "Part Payments",
+      "Debit Notes",
       "Balance",
       "Unpaid days",
     ];
@@ -153,15 +156,15 @@ const GeneratePdfReport = ({ data, type }: Propes) => {
             : `${bill.customer.name},${bill.customer.city} `;
         const row = [
           index + 1,
-          bill.billNumber,
-          (new Date(bill.billDate) as any).toLocaleDateString(),
           partyName,
+          (new Date(bill.billDate) as any).toLocaleDateString(),
+          bill.billNumber,
           bill.grossAmount.toFixed(2),
-          bill.debitNotes
-            .reduce((sum, p) => sum + p.returnAmount, 0)
-            .toFixed(2),
           bill.payments
-            .reduce((sum, p) => sum + p.transactionAmount, 0)
+            .reduce((sum: number, p: any) => sum + p.transactionAmount, 0)
+            .toFixed(2),
+          bill.debitNotes
+            .reduce((sum: number, p: any) => sum + p.returnAmount, 0)
             .toFixed(2),
           bill.unPaidAmount.toFixed(2),
           bill.unPaidDays.toString(),

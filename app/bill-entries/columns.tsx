@@ -8,13 +8,16 @@ import { DataTableRowActions } from "@/components/ui/data-table-row-actions";
 
 export const columns: ColumnDef<BillEntry>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-    enableHiding: true,
-  },
-  {
     accessorKey: "billId",
     header: "Bill ID",
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
+    // meta: {
+    //   hidden: true,
+    // },
+    // enableHiding: true,
   },
   {
     accessorKey: "billDate",

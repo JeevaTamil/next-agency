@@ -43,9 +43,7 @@ export default function SuppliersPage() {
     <Box>
       {/* Header Section */}
       <Box className="flex justify-between items-center mb-4">
-        <Text>
-          <strong>Suppliers</strong>
-        </Text>
+        <h1 className="text-2xl font-bold mb-5">Suppliers</h1>
         <Button variant="outline">
           <Link href="/suppliers/new">
             <Box className="flex items-center space-x-2">

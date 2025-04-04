@@ -19,6 +19,7 @@ const CustomerReportWrapper = ({ customers }: Params) => {
 
   return (
     <div>
+      <h1 className="text-2xl font-bold mb-5">Customer Report</h1>
       <Box className="grid space-y-4">
         <CustomerReportForm
           customers={customers}
