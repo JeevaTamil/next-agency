@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
         b.grossAmount -
         b.payments.reduce((sum, p) => sum + p.transactionAmount, 0);
 
-      const taxAmount = parseFloat((b.grossAmount * (5 / 100)).toFixed(2));
+      const taxAmount = parseFloat((b.netAmount * (5 / 100)).toFixed(2));
 
       // if (unPaidAmount > 0) {
       return {

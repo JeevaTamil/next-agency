@@ -59,7 +59,7 @@ const AddBillEntryForm = ({
 
   useEffect(() => {
     if (netAmount) {
-      const grossAmount = (netAmount * 1.05).toFixed(2);
+      const grossAmount = Math.round(netAmount * 1.05).toFixed(2);
       form.setValue("grossAmount", parseFloat(grossAmount));
     } else {
       form.setValue("grossAmount", 0);

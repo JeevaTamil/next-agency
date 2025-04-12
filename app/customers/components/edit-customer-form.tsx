@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box } from "@radix-ui/themes";
 import axios from "axios";
@@ -22,78 +21,41 @@ import { z } from "zod";
 
 type customerFormData = z.infer<typeof customerSchema>;
 
-interface AddCustomerFormProps {
-  customer?: customerFormData & { id?: number }; // Optional customer object for edit flow
+interface EditCustomerFormProps {
+  customer: customerFormData & { id: number }; // Include `id` for editing
 }
 
-const AddCustomerForm = ({ customer }: AddCustomerFormProps) => {
+const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<customerFormData>({
     resolver: zodResolver(customerSchema),
-    defaultValues: customer || {}, // Pre-fill form if customer data is provided
+    defaultValues: customer, // Pre-fill the form with existing customer data
   });
-
-  const addDummyCustomer = () => {
-    form.setValue("name", faker.company.name().substring(0, 20).toUpperCase());
-    form.setValue("city", faker.location.city());
-    form.setValue("address", faker.location.streetAddress());
-    form.setValue(
-      "phone",
-      `${faker.number.int({ min: 7000000000, max: 9999999999 })}`
-    );
-    form.setValue("gst", faker.string.alphanumeric(15).toUpperCase());
-  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      const storedAgency = localStorage.getItem("agencyId");
-      const dataWithAgency = {
-        ...data,
-        agencyId: storedAgency ? Number(storedAgency) : 1,
-      };
-      if (customer && customer.id) {
-        // Edit flow
-        const updatedData = { ...dataWithAgency, id: customer.id };
-        await axios.put("/api/customers", updatedData).then((res) => {
-          if (res.status === 200) {
-            toast({
-              title: "Customer Updated",
-              description: `Customer ${data.name} has been updated successfully`,
-            });
-            router.push("/customers");
-            router.refresh();
-          } else {
-            toast({
-              title: "Error occurred",
-              description: `${(res.data as any).message}`,
-              variant: "destructive",
-            });
-          }
-        });
-      } else {
-        // Add flow
-        await axios.post("/api/customers", dataWithAgency).then((res) => {
-          if (res.status === 201) {
-            toast({
-              title: "Customer Created",
-              description: `Customer ${data.name} has been added successfully`,
-            });
-            router.push("/customers");
-            router.refresh();
-          } else {
-            toast({
-              title: "Error occurred",
-              description: `${(res.data as any).message}`,
-              variant: "destructive",
-            });
-          }
-        });
-      }
+      const updatedData = { ...data, id: customer.id }; // Include the customer ID
+      await axios.put("/api/customers", updatedData).then((res) => {
+        if (res.status === 200) {
+          toast({
+            title: "Customer Updated",
+            description: `Customer ${data.name} has been updated successfully`,
+          });
+          router.push("/customers");
+          router.refresh();
+        } else {
+          toast({
+            title: "Error occurred",
+            description: `${(res.data as any).message}`,
+            variant: "destructive",
+          });
+        }
+      });
     } catch (error) {
       toast({
-        title: "Error occured",
+        title: "Error occurred",
         description: `${(error as any).message}`,
         variant: "destructive",
       });
@@ -121,7 +83,6 @@ const AddCustomerForm = ({ customer }: AddCustomerFormProps) => {
                       {...field}
                     />
                   </FormControl>
-                  {/* <FormDescription>This is your public display name.</FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -206,14 +167,8 @@ const AddCustomerForm = ({ customer }: AddCustomerFormProps) => {
           </Box>
           <Box className="flex gap-x-5">
             <Button variant="default" type="submit">
-              {customer ? "Update" : "Submit"}
+              Update
             </Button>
-
-            {!customer && (
-              <Button variant="default" onClick={addDummyCustomer}>
-                Add Dummy Customer
-              </Button>
-            )}
           </Box>
         </Box>
       </form>
@@ -221,4 +176,4 @@ const AddCustomerForm = ({ customer }: AddCustomerFormProps) => {
   );
 };
 
-export default AddCustomerForm;
+export default EditCustomerForm;

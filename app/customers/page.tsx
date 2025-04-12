@@ -45,7 +45,7 @@ const CustomersPage = () => {
     <Box>
       <Box className="flex justify-between items-center">
         <Box>
-        <h1 className="text-2xl font-bold mb-5">Customers</h1>
+          <h1 className="text-2xl font-bold mb-5">Customers</h1>
         </Box>
         <Box>
           <Button variant="outline">
@@ -61,7 +61,11 @@ const CustomersPage = () => {
       {loading ? (
         <p>Loading customers...</p>
       ) : customers.length > 0 ? (
-        <DataTable columns={columns} data={customers} />
+        <DataTable
+          columns={columns}
+          data={customers}
+          filterColumn={["name", "city"]}
+        />
       ) : (
         <p>No customers found for this agency.</p>
       )}
