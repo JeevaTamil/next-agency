@@ -66,7 +66,7 @@ const AddCustomerForm = ({ customer }: AddCustomerFormProps) => {
             router.refresh();
           } else {
             toast({
-              title: "Error occurred",
+              title: "Error occured",
               description: `${(res.data as any).message}`,
               variant: "destructive",
             });

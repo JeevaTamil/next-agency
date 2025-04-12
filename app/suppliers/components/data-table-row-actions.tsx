@@ -13,23 +13,12 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-export function CustomerRowActions<TData>({
+export function SupplierRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const { toast } = useToast();
@@ -50,7 +39,7 @@ export function CustomerRowActions<TData>({
           onClick={() => {
             const rowItemId = row.getValue("id");
             console.log(row.getAllCells());
-            router.push(`/customers/${rowItemId}/edit`);
+            router.push(`/suppliers/${rowItemId}/edit`);
           }}
         >
           Edit
@@ -60,7 +49,7 @@ export function CustomerRowActions<TData>({
           onClick={async () => {
             const rowItemId = row.getValue("id");
             try {
-              axios.delete(`/api/customers?id=${rowItemId}`).then((res) => {
+              axios.delete(`/api/suppliers?id=${rowItemId}`).then((res) => {
                 if (res.status === 200) {
                   toast({
                     title: "Customer deleted",
@@ -75,7 +64,7 @@ export function CustomerRowActions<TData>({
                     description: `${(res.data as any).message}`,
                     variant: "destructive",
                   });
-                  router.push("/customers");
+                  router.push("/suppliers");
                 }
               });
             } catch (error) {
@@ -84,7 +73,7 @@ export function CustomerRowActions<TData>({
                 description: `${(error as any).message}`,
                 variant: "destructive",
               });
-              router.push("/customers");
+              router.push("/suppliers");
             }
           }}
         >
@@ -95,4 +84,4 @@ export function CustomerRowActions<TData>({
   );
 }
 
-export default CustomerRowActions;
+export default SupplierRowActions;

@@ -7,7 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CustomerReportWrapper from "./components/customer-report-wrapper";
 
-const CustomerReport = async () => {
+const CustomerReport = () => {
   // const customers = await prisma.customer.findMany();
   // console.log(customers);
 

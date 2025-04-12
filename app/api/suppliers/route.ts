@@ -66,3 +66,60 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, ...updateData } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Supplier ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const updatedSupplier = await prisma.supplier.update({
+      where: { id: Number(id) },
+      data: updateData,
+    });
+
+    return NextResponse.json(
+      { message: "Supplier Updated", data: updatedSupplier },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating supplier:", error);
+    return NextResponse.json(
+      { error: "Failed to update supplier" },
+      { status: 500 }
+    );
+  }
+}
+
+// ✅ Delete (DELETE) operation
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Supplier ID is required" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.supplier.delete({
+      where: { id: Number(id) },
+    });
+
+    return NextResponse.json({ message: "Supplier Deleted" }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting supplier:", error);
+    return NextResponse.json(
+      { error: "Failed to delete supplier" },
+      { status: 500 }
+    );
+  }
+}

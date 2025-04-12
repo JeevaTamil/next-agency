@@ -58,7 +58,11 @@ export default function SuppliersPage() {
       {loading ? (
         <p>Loading suppliers...</p>
       ) : suppliers.length > 0 ? (
-        <DataTable columns={columns} data={suppliers} />
+        <DataTable
+          columns={columns}
+          data={suppliers}
+          filterColumn={["name", "city"]}
+        />
       ) : (
         <p>No suppliers found for this agency.</p>
       )}

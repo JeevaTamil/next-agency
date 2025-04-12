@@ -22,12 +22,17 @@ import { z } from "zod";
 
 type supplierFormData = z.infer<typeof supplierSchema>;
 
-const AddSupplierForm = () => {
+interface AddSupplierFormProps {
+  supplier?: supplierFormData & { id?: number }; // Optional customer object for edit flow
+}
+
+const AddSupplierForm = ({ supplier }: AddSupplierFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<supplierFormData>({
     resolver: zodResolver(supplierSchema),
+    defaultValues: supplier || {}, // Pre-fill form if supplier data is provided
   });
 
   const addDummySupplier = () => {
@@ -46,31 +51,52 @@ const AddSupplierForm = () => {
   };
 
   const onSubmit = form.handleSubmit(async (data) => {
-    console.log(data);
     try {
       const storedAgency = localStorage.getItem("agencyId");
       const dataWithAgency = {
         ...data,
         agencyId: storedAgency ? Number(storedAgency) : 1,
       };
-      await axios.post("/api/suppliers", dataWithAgency).then((res) => {
-        if (res.status === 201) {
-          toast({
-            title: "Supplier Created",
-            description: `Supplier ${data.name} has been added successfully`,
-          });
-          router.push("/suppliers");
-          router.refresh();
-          console.log(res);
-        } else {
-          console.error(res.data.message);
-          toast({
-            title: "Error occured",
-            description: `${(res.data as any).message}`,
-            variant: "destructive",
-          });
-        }
-      });
+      if (supplier && supplier.id) {
+        // Edit flow
+        const updatedData = { ...dataWithAgency, id: supplier.id };
+        await axios.put("/api/suppliers", updatedData).then((res) => {
+          if (res.status === 200) {
+            toast({
+              title: "Supplier Updated",
+              description: `Supplier ${data.name} has been updated successfully`,
+            });
+            router.push("/suppliers");
+            router.refresh();
+          } else {
+            toast({
+              title: "Error occured",
+              description: `${(res.data as any).message}`,
+              variant: "destructive",
+            });
+          }
+        });
+      } else {
+        // Add flow
+        await axios.post("/api/suppliers", dataWithAgency).then((res) => {
+          if (res.status === 201) {
+            toast({
+              title: "Supplier Created",
+              description: `Supplier ${data.name} has been added successfully`,
+            });
+            router.push("/suppliers");
+            router.refresh();
+            console.log(res);
+          } else {
+            console.error(res.data.message);
+            toast({
+              title: "Error occured",
+              description: `${(res.data as any).message}`,
+              variant: "destructive",
+            });
+          }
+        });
+      }
     } catch (error) {
       console.error(error);
       toast({
