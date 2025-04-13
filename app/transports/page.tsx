@@ -13,7 +13,7 @@ const TransportPage = async () => {
     <Box>
       <Box className="flex justify-between items-center">
         <Box>
-        <h1 className="text-2xl font-bold mb-5">Transports</h1>
+          <h1 className="text-2xl font-bold mb-5">Transports</h1>
         </Box>
         <Box>
           <Button variant="outline">

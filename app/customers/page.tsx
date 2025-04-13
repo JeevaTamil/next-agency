@@ -6,7 +6,7 @@ import { useAgencyStore } from "@/store/agencyStore";
 import { Customer } from "@prisma/client";
 import { Box, Text } from "@radix-ui/themes";
 import axios from "axios";
-import { PlusSquare } from "lucide-react";
+import { Loader2, PlusSquare } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { columns } from "./columns";
@@ -59,7 +59,10 @@ const CustomersPage = () => {
         </Box>
       </Box>
       {loading ? (
-        <p>Loading customers...</p>
+         <div className="flex flex-col items-center justify-center h-full space-y-2 t-50">
+         <Loader2 className="animate-spin" />
+         <p>Loading...</p>
+       </div>
       ) : customers.length > 0 ? (
         <DataTable
           columns={columns}
