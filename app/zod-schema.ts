@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const customerSchema = z.object({
-  name: z.string().min(3).max(25),
+  name: z.string().min(3).max(50),
   address: z.string(),
   phone: z.string().min(10).max(15),
   city: z.string().min(3),
@@ -9,7 +9,7 @@ export const customerSchema = z.object({
 });
 
 export const supplierSchema = z.object({
-  name: z.string().min(3).max(25),
+  name: z.string().min(3).max(50),
   address: z.string(),
   phone: z.string().min(10).max(15),
   city: z.string().min(3),
